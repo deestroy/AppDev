@@ -1,1 +1,2 @@
 # AppDev
+The projectis a photo-based calorie counting application running on iOS and Android cell phones. The objective of the application is to identify foods, determine portion size and calculate the number of calories consumed. This program will also be able store the data inputted and create weekly summary reports based on the given data to ensure that the client is moving towards a set goal. The user can specify their goal through an initial survey and share the progress on major social networking platforms. 
