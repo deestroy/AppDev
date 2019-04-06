@@ -16,8 +16,7 @@ class MyApp extends StatelessWidget {
           title: Text('CalorPic'),
         ),
         body: Card(child: Column(children: <Widget>[
-          Image.asset('assets/food.jpg'),
-          Text('Food')
+          
         ],),),
       ),
     );
