@@ -12,14 +12,7 @@ from keras_preprocessing import image
 #x_train, x_test = x_train / 255.0, x_test / 255.0
 
 #Initializer
-model = tf.keras.models.Sequential(
-  #tf.keras.layers.Fla
-  # tten(input_shape=(28, 28)),
-  #tf.keras.layers.Dense(128, activation='relu'),
-  #tf.keras.layers.Dropout(0.2),
-  #tf.keras.layers.Dense(10, activation='softmax'),
-  #tf.keras.layers.MaxPooling2D(pool_size=(2,2))
-)
+model = tf.keras.models.Sequential()
 #Covolution -- extract features of image --> relu helps with that
 model.add(Convolution2D(32, 3, 3, 
                         input_shape = (64, 64, 3), 
