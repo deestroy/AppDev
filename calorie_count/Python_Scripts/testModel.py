@@ -80,7 +80,7 @@ result = model.predict(test_image)
 
 training_set.class_indices
 if result[0][0] >= 0.5:
-     prediction = 'dog'
+     prediction = ''
 else:
-      prediction = 'cat'
+      prediction = ''
 print(prediction)
