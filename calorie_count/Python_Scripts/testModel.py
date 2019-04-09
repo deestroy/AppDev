@@ -1,15 +1,24 @@
-import tensorflow as tf
+import os
+#import listdir
+from os.path import isfile, join
+
 import numpy as np
-from tensorflow._api.v1.compat.v1.keras.layers import MaxPooling2D,Flatten,Dense,Convolution2D
+import tensorflow as tf
+from keras_preprocessing import ImageDataGenerator
+from tensorflow._api.v1.compat.v1.keras.layers import (Convolution2D, Dense,
+                                                       Flatten, MaxPooling2D)
 from tensorflow._api.v1.compat.v1.keras.models import Sequential
-from tensorflow._api.v1.compat.v1.keras.preprocessing.image import image_data_generator
-from keras_preprocessing import image
+from tensorflow._api.v1.compat.v1.keras.preprocessing.image import \
+    image_data_generator
+#from tensorflow.contrib import summary
+from tensorflow.python.keras.models import load_keras_model
+from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
 
+import cv2
 
-#mnist = tf.keras.datasets.mnist
+UPLOAD_FOLDER = '../../data/food-101/test/'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-#(x_train, y_train), (x_test, y_test) = mnist.load_data()
-#x_train, x_test = x_train / 255.0, x_test / 255.0
 
 #Initializer
 model = tf.keras.models.Sequential()
@@ -30,17 +39,16 @@ train_datagen = image_data_generator(
 test_datagen = image_data_generator(rescale=1./255)
 
 training_set = train_datagen.flow_from_directory(
-        'data/training_set',
+        'UPMC_Food101/train',
         target_size=(64,64),
         batch_size = 32,
-        class_mode = 'binary')
+        class_mode = 'categorical')
 
 test_set = test_datagen.flow_from_directory(
-      'data/training_set',
+      'UPMC_Food101/test',
         target_size=(64,64),
         batch_size = 32,
-        class_mode = 'binary'
-)
+        class_mode = 'categorical')
 
 #Pool -- reduces dimensionality
 model.add(MaxPooling2D(pool_size = (2, 2)))
@@ -50,7 +58,9 @@ model.add(Flatten())
 
 #connect CNN to NN +compile
 model.add(Dense(128, activation = 'relu'))
-model.add(Dense(1, activation = 'sigmoid'))
+model.add(Dense(128, activation = 'relu'))
+model.add(Dense(128, activation = 'relu'))
+model.add(Dense(3, activation = 'sigmoid'))
 
 model.compile(optimizer='adam',
               loss='binary_crossentropy',
@@ -61,19 +71,13 @@ model.compile(optimizer='adam',
 
 model.fit_generator(
   training_set,
-  steps_per_epoch= 8000,
-  epochs= 10,
+  steps_per_epoch= 2030,
+  epochs= 20,
   validation_data= test_set,
-  validation_steps= 800)
+  validation_steps= 679)
 
-test_image = image.load_img('random.jpg', target_size = (64, 64))
-test_image = image.img_to_array(test_image)
-test_image = np.expand_dims(test_image, axis = 0)
-result = model.predict(test_image)
-
-training_set.class_indices
-if result[0][0] >= 0.5:
-     prediction = ''
-else:
-      prediction = ''
-print(prediction)
+model.summary()
+model.save('cs_model.h5')
+model2 = load_keras_model('cs_model.h5')
+model2.summary()
+res = model.predict()
