@@ -3,17 +3,18 @@ import os
 from os.path import isfile, join
 
 import numpy as np
+import time
 import tensorflow as tf
-from keras_preprocessing import ImageDataGenerator
+from tensorflow._api.v1.compat.v1.keras.optimizers import SGD
+from tensorflow._api.v1.compat.v1.keras.utils import np_utils
+from tensorflow._api.v1.compat.v1.keras.preprocessing import ImageDataGenerator
 from tensorflow._api.v1.compat.v1.keras.layers import (Convolution2D, Dense,
                                                        Flatten, MaxPooling2D)
 from tensorflow._api.v1.compat.v1.keras.models import Sequential
-from tensorflow._api.v1.compat.v1.keras.preprocessing.image import \
-    image_data_generator
+from tensorflow._api.v1.compat.v1.keras.preprocessing.image import image_data_generator
 #from tensorflow.contrib import summary
-from tensorflow.python.keras.models import load_keras_model
-from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
-
+from tensorflow._api.v1.compat.v1.keras.models import load_keras_model
+from tensorflow._api.v1.compat.v1.keras.models import image_data_generator
 import cv2
 
 UPLOAD_FOLDER = '../../data/food-101/test/'
