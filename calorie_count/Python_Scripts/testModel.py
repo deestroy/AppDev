@@ -2,7 +2,7 @@ import os
 #import listdir
 from os.path import isfile, join
 import numpy as np
-import time
+#import time
 import tensorflow as tf
 from tensorflow._api.v1.compat.v1.keras.optimizers import SGD
 from tensorflow._api.v1.compat.v1.keras.utils import np_utils
