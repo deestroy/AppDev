@@ -692,9 +692,7 @@ class AnimationBox extends StatelessWidget {
   final double overral = 3.0;
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return AnimatedBuilder(
+  Widget build(BuildContext context) => AnimatedBuilder(
       animation: controller,
       builder: (BuildContext context, Widget child) {
         return Stack(
@@ -825,5 +823,4 @@ class AnimationBox extends StatelessWidget {
         );
       },
     );
-  }
 }
