@@ -1,3 +1,4 @@
+import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -17,9 +18,9 @@ TextEditingController weightController = new TextEditingController();
 
 class QuestionPageState extends State<QuestionPage>
     with TickerProviderStateMixin {
-  int age, height, weight;
+  double age, height, weight;
   int currentIndex = 0;
-  String exerTimes, goal, gender;
+  String exerTimes, goal, gender, activityLevel, loseGain;
   bool completed = false;
 
   List<String> questions = [
@@ -33,16 +34,23 @@ class QuestionPageState extends State<QuestionPage>
 
   List<ExerQ> exerQuestion = [
       ExerQ('noX', 'Sedentary: Little to no exercise'),
-      ExerQ('lightX', 'Light: 1-3 days'),
-      ExerQ('moderateX', 'Moderate: 3-5 days'),
-      ExerQ('activeX', 'Active: 6-7 days'),
-      ExerQ("vactiveX", "Extra active: Ver hard exercise/sports")
+      ExerQ('lightX', 'Lightly Active: Exercise 1-3 days/week'),
+      ExerQ('moderateX', 'Active: Moderate exercise 3-5 days/week'),
+      ExerQ('activeX', 'Active: Heavy exercise 6-7 days'),
+      ExerQ("extremeX", "Very Active: Non-stop training")
     ];
 
   List<GoalQ> goalQuestion = 
   [
     GoalQ("lose1", "Lose 0.5 lbs a week"),
-
+    GoalQ("lose2", "Lose 1.0 lbs a week"),
+    GoalQ("lose3", "Lose 1.5 lbs a week"),
+    GoalQ("lose4", "Lose 2.0 lbs a week"),
+    GoalQ("maintain", "Maintain weight"),
+    GoalQ("gain1", "Gain 0.5 lbs a week"),
+    GoalQ("gain2", "Gain 1.0 lbs a week"),
+    GoalQ("gain3", "Gain 1.5 lbs a week"),
+    GoalQ("gain4", "Gain 2.0 lbs a week"),
   ];
 
   List<GenderQ> genderQuestion = [
@@ -50,7 +58,6 @@ class QuestionPageState extends State<QuestionPage>
     GenderQ("F", "Female")
   ];
 
-  
   AnimationController _animateController;
   AnimationController _longPressController;
   AnimationController _secondStepController;
@@ -177,6 +184,7 @@ class QuestionPageState extends State<QuestionPage>
       body: Center(
         child: Container(
           padding: EdgeInsets.all(16.0),
+        //  child: getPages(_width),
           child: _animateController.isCompleted
               ? getPages(_width)
               : AnimationBox(
@@ -197,18 +205,26 @@ class QuestionPageState extends State<QuestionPage>
               height: 50.0,
               child: GestureDetector(
                 onTap: () {
-                  if (completed = true) { //FIX COMPLETED. STILL ALLOWS USER TO MOVE ON
+                 //TODO: FIX COMPLETED. STILL ALLOWS USER TO MOVE ON
                   setState(() {
                     currentIndex += 1;
-                    if (currentIndex == 1) {
-                      _startSecondStepAnimation();
-                    } else if (currentIndex == 2) {
-                      _startThirdStepAnimation();
-                    } else if (currentIndex == 3) {
-                      _startFourStepAnimation();
-                    }
+                  //   if (currentIndex == 1) {
+                  //     _startSecondStepAnimation();
+                  //   } else if (currentIndex == 2) {
+                  //     _startThirdStepAnimation();
+                  //   } else if (currentIndex == 3) {
+                  //     _startFourStepAnimation();
+                  //   }
                   });
+                  
+                  if (currentIndex == 6) {
+                    //make an object containing all the answers
+                    QuestionAnswers calorieGoal = new QuestionAnswers(age, height, weight, gender, activityLevel, goal);
+                    Calculator().calorieCalculator(calorieGoal);
+                    print("Finished");
+                    Navigator.pushNamed(context, '/results');
                   }
+                  
                 },
                 child: Center(
                     child: Text(
@@ -216,8 +232,12 @@ class QuestionPageState extends State<QuestionPage>
                   style: TextStyle(fontSize: 20.0, color: Colors.orangeAccent),
                 )),
               ),
-            ))
+            ),
+            )
           : null,
+          
+
+          //TODO: BACK BUTTON that sets currentindex to previous
     );
   } //build
 
@@ -226,6 +246,7 @@ class QuestionPageState extends State<QuestionPage>
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
+      //  AppBar (title: Text("Questionnaire")),
         Container(
           margin: EdgeInsets.only(top: 30.0),
           height: 10.0,
@@ -246,19 +267,20 @@ class QuestionPageState extends State<QuestionPage>
             }),
           ),
         ),
-        currentIndex == 0 ? _inputQuestion(ageController, "Question 1", questions[0]) : currentIndex == 1
+        currentIndex == 0 ? _getGoalQ() : currentIndex == 1
+        //? _inputQuestion(ageController, "Question 1", questions[0]) : currentIndex == 1
              ? _inputQuestion(heightController, "Question 2",questions[1])
              : currentIndex == 2
             ? _inputQuestion(weightController, "Question 3", questions[2]) :
             currentIndex == 3
-            ? _getFourthQ() :
+            ? _getGenderQ() :
             currentIndex == 4
-             ? _getFifthQ() : _getSixthQ()
+             ? _getActLvlQ() :_getGoalQ()
       ],
     );
   }
 
-  Widget _inputQuestion (controllerName, String quesNum, String ques) {
+  Widget _inputQuestion(controllerName, String quesNum, String ques) {
   return Expanded(
       child: Container(
         margin: EdgeInsets.only(top: 34.0),
@@ -297,31 +319,29 @@ class QuestionPageState extends State<QuestionPage>
     );
 }//inputQuestion
 
-_submitted(String a, String q) {
-//  if (a != null) {
+_submitted(String a, String q) { //TODO: make sure textfield is not empty
   if (q == questions[0]) {
     setState(() {
-      age = int.parse(a);
+      age = double.parse(a);
       print ("Age is $age");
     });
   } else if (q == questions[1]) {
-    height = int.parse(a);
+    height = double.parse(a);
     print("Height is $height");
   } else if (q == questions[2]) {
-    weight = int.parse(a);
+    weight = double.parse(a);
     print("Weight is $weight");
   }
- // }
 }
 
-Widget _getFourthQ() {
+Widget _getActLvlQ() {
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(top: 34.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Text("Question 4"),
+                Text("Question 5"),
                 Container(
                     margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
                     child: Text(questions[3])),
@@ -338,6 +358,7 @@ Widget _getFourthQ() {
                               onTapUp: (detail) {
                                 setState(() {
                                   exerTimes = using.identifier;
+                                  activityLevel = using.identifier;
                                   print(exerTimes);
                                 });
                               },
@@ -357,7 +378,6 @@ Widget _getFourthQ() {
                                             onChanged: (String value) {
                                               setState(() {
                                                 exerTimes = value;
-                                                print("changed");
                                               });
                                             }),
                                         Text(using.displayContent)
@@ -384,21 +404,24 @@ Widget _getFourthQ() {
     );
   } //exerciseQuestion
 
-  Widget _getFifthQ() {
+  Widget _getGoalQ() {
     return Expanded(
-      child: Container(
-        margin: EdgeInsets.only(top: 34.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: SingleChildScrollView(
+
+           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+          //  child: ListView(
+          //    shrinkWrap: true,
               children: <Widget>[
-                Text("Question 5"),
+                Container(
+                    margin: EdgeInsets.only(top: 34.0),
+                    child: Text("Question 6"),
+                ),
                 Container(
                     margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
                     child: Text(questions[4])),
-                Expanded(
-                  child: Center(
+                  Center(
                     child: Container(
-                   //   height: 208.0,
                       child: Card(
                         child: Column(
                           children: List.generate(goalQuestion.length,
@@ -408,6 +431,7 @@ Widget _getFourthQ() {
                               onTapUp: (detail) {
                                 setState(() {
                                   goal = using.identifier;
+                                  loseGain = using.identifier;
                                   print(goal);
                                 });
                               },
@@ -427,7 +451,6 @@ Widget _getFourthQ() {
                                             onChanged: (String value) {
                                               setState(() {
                                                 goal = value;
-                                                print("changed");
                                               });
                                             }),
                                         Text(using.displayContent)
@@ -447,21 +470,20 @@ Widget _getFourthQ() {
                       ),
                     ),
                   ),
-                )
               ],
-            ),
           ),
+      ),
     );
   } //exerciseQuestion
 
-Widget _getSixthQ() {
+Widget _getGenderQ() {
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(top: 34.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Text("Question 6"),
+                Text("Question 4"),
                 Container(
                     margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
                     child: Text(questions[5])),
@@ -643,7 +665,7 @@ class AnimationBox extends StatelessWidget {
         ),
         numberOfStep = IntTween(
           begin: 1,
-          end: 4,
+          end: 6, //
         ).animate(
           CurvedAnimation(
             parent: controller,
@@ -699,7 +721,8 @@ class AnimationBox extends StatelessWidget {
                                 BorderRadius.all(Radius.circular(2.0)),
                           ),
                           height: 10.0,
-                          width: (screenWidth - 15.0) / 5.0,
+                       //   width: (screenWidth - 15.0) / 5.0,
+                       width: (screenWidth - 32.0 - 15.0) / 5.8,
                           margin: EdgeInsets.only(left: index == 0 ? 0.0 : 5.0),
                         );
                       }),
@@ -754,11 +777,12 @@ class AnimationBox extends StatelessWidget {
                         color: Colors.orangeAccent,
                         fontWeight: FontWeight.bold,
                         fontSize: 24.0),
+                        textAlign: TextAlign.left,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0, bottom: 120.0),
                     child: Text(
-                      'Complete this quick questionnaire so we can determine the number of calories you should intake',
+                      'Please complete this quick questionnaire so we can determine the number of calories you should intake',
                       style: TextStyle(
                         fontSize: 16.0,
                       ),

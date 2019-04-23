@@ -6,8 +6,14 @@ class DashboardPage extends StatelessWidget {
     // TODO: implement build
     return new Scaffold(
         body: Container(
-            child: Center(
-      child: Text("dashboard"),
-    )));
+          child: Column(
+            children: <Widget>[
+              Text ("Dashboard"),
+             
+            ],
+          ),
+            
+        )
+    );
   }
 }
