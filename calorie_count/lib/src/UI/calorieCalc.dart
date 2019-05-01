@@ -1,4 +1,3 @@
-
 import 'package:calorie_count/main.dart';
 import 'package:flutter/material.dart';
 
@@ -8,34 +7,77 @@ class CalorieCalc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold (
+    return Scaffold(
       body: Container(
         child: Column(
           children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 25.0, left: 10.0, right: 10.0),
+              child: Center(
+                child: Container(
+                  padding: EdgeInsets.only(
+                      top: 20.0, bottom: 20.0, left: 16.0, right: 16.0),
+                  child: Wrap(
+                    children: <Widget>[
+                      Text(
+                        "Based on your answers, your total daily calorie intake has been calculate to help you reach your goal! Your recommended intake is displayed below. You can edit it or simply click 'Save' to continue",
+                        style: TextStyle(fontSize: 16.0, color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                  decoration: BoxDecoration(
+                      color: AppColours().offBlack,
+                      borderRadius: BorderRadius.circular(15.0)),
+                ),
+              ),
+            ),
+            Padding(padding: EdgeInsets.all(32.0)),
+            // ListWheelScrollView(
+
+            // )
             Container(
+              padding: EdgeInsets.only(
+                  top: 20.0, bottom: 20.0, left: 70.0, right: 70.0),
               child: Text(
-                "Based on your answers, "
+                Calculator().calories.toString(),
+                style: TextStyle(fontSize: 40.0, color: AppColours().offBlack),
               ),
               decoration: BoxDecoration(
-                color: AppColours().offBlack,
-                
+                  border: Border.all(color: AppColours().offBlack),
+                  borderRadius: BorderRadius.circular(15.0)),
+            ),
+
+            Container(
+              width: 90.0,
+              margin: EdgeInsets.only(left: 270.0, top: 290.0),
+              padding: EdgeInsets.only(left: 8.0, right: 8.0),
+              child: FlatButton(
+                child: Text("Save",
+                    style: TextStyle(fontSize: 16.0, color: Colors.white)),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/home');
+                },
               ),
-              
-            )
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: AppColours().offBlack,
+              ),
+            ),
           ],
         ),
       ),
-      );
+    );
   }
-
 }
 
 //question object to be passed to make calculations
 class QuestionAnswers {
-  double age, height, weight, gender, activitylvl,loseGain;
+  double age, height, weight, gender, activitylvl, loseGain;
 
   // constructor
-  QuestionAnswers (double a, double h, double w, String gen, String pa, String goal) {
+  QuestionAnswers(
+      double a, double h, double w, String gen, String pa, String goal) {
     setAge(a);
     setHeight(h);
     setWeight(w);
@@ -47,12 +89,15 @@ class QuestionAnswers {
   setAge(double a) {
     age = a;
   }
+
   setHeight(double h) {
     height = h;
   }
+
   setWeight(double w) {
     weight = w;
   }
+
   setGender(String gen) {
     if (gen == "M") {
       gender = 0; //male
@@ -60,23 +105,22 @@ class QuestionAnswers {
       gender = 1; //female
     }
   }
+
   //setting the number you need to multiply by to get BMR
-  setActLvl(String pa) { 
+  setActLvl(String pa) {
     if (pa == "noX") {
       activitylvl = 1.2;
     } else if (pa == "lightX") {
       activitylvl = 1.375;
-    }
-    else if (pa == "moderateX") {
+    } else if (pa == "moderateX") {
       activitylvl = 1.55;
-    }
-    else if (pa == "activeX") {
+    } else if (pa == "activeX") {
       activitylvl = 1.725;
-    }
-    else if (pa == "extremeX") {
+    } else if (pa == "extremeX") {
       activitylvl = 1.9;
     }
   }
+
   setLoseGain(String goal) {
     if (goal == "lose1") {
       loseGain = -250.0;
@@ -96,47 +140,87 @@ class QuestionAnswers {
       loseGain = 750.0;
     } else if (goal == "gain4") {
       loseGain = 1000.0;
-    } 
+    }
   }
 
   //FUNCTIONS TO GET VARIABLES
   getAge() {
     return age;
   }
+
   getWeight() {
     return weight;
   }
+
   getHeight() {
     return height;
   }
+
   getGender() {
     return gender;
   }
+
   getActLvl() {
     return activitylvl;
   }
+
   getLoseGain() {
     return loseGain;
   }
-
-}//QuestionAnswers
+} //QuestionAnswers
 
 class Calculator {
-int calories;
-double bmr;
+  int calories;
+  double bmr;
 
-    calorieCalculator(QuestionAnswers ans) {
+  calorieCalculator(QuestionAnswers ans, String unit) {
+    //Metric Calculations
+    if (unit == "Metric") {
+      if (ans.getGender() == 0) {
+        //male
+        bmr = ((66.5 +
+                    (13.75 * ans.getWeight()) +
+                    (5.003 * ans.getHeight()) -
+                    (6.775 * ans.getAge())) *
+                ans.getActLvl()) +
+            ans.getLoseGain();
+        calories = bmr.round();
+        print("This male should be consuming $calories calories");
+      } else if (ans.getGender() == 1) {
+        //female
+        bmr = ((655.1 +
+                    (9.563 * ans.getWeight()) +
+                    (1.85 * ans.getHeight()) -
+                    (4.676 * ans.getAge())) *
+                ans.getActLvl()) +
+            ans.getLoseGain();
+        calories = bmr.round();
+        print("This female should be consuming $calories calories");
+      }
 
-    if (ans.getGender() == 0) { //male
-      bmr = ((66.5 + (13.75*ans.getWeight()) + (5.003*ans.getHeight()) - (6.775* ans.getAge()))*ans.getActLvl()) + ans.getLoseGain();
-      calories = bmr.round();
-      print("This male should be consuming $calories calories");
-    } 
-    else if (ans.getGender() == 1) {
-      bmr = ((655.1 + (9.563*ans.getWeight()) + (1.85*ans.getHeight()) - (4.676*ans.getAge()))*ans.getActLvl()) + ans.getLoseGain();
-      calories = bmr.round();
-      print("This female should be consuming $calories calories");
+      //Imperial calculations
+    } else if (unit == "Imperial") {
+      if (ans.getGender() == 0) {
+        //male
+        bmr = ((66.0 +
+                    (6.23 * ans.getWeight()) +
+                    (12.7 * ans.getHeight()) -
+                    (6.8 * ans.getAge())) *
+                ans.getActLvl()) +
+            ans.getLoseGain();
+        calories = bmr.round();
+        print("This male should be consuming $calories calories");
+      } else if (ans.getGender() == 1) {
+        //female
+        bmr = ((655.0 +
+                    (4.35 * ans.getWeight()) +
+                    (4.7 * ans.getHeight()) -
+                    (4.7 * ans.getAge())) *
+                ans.getActLvl()) +
+            ans.getLoseGain();
+        calories = bmr.round();
+        print("This female should be consuming $calories calories");
+      }
     }
-
-  }
-}
+  } //calorieCalculator
+} //Calculator

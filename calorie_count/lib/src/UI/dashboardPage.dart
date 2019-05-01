@@ -1,3 +1,4 @@
+import 'package:calorie_count/main.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -17,7 +18,7 @@ class DashboardPage extends StatelessWidget {
                   children: <Widget>[
                     Container(
                       padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                      //  decoration: BoxDecoration(color: Colors.pink),
+                      
                       width: 375.0,
                       child: Text(
                         "Food Log",
@@ -81,6 +82,7 @@ class DashboardPage extends StatelessWidget {
                   shape: new CircleBorder(),
                   borderSide: BorderSide(color: Colors.grey, width: 2.0),
                   highlightedBorderColor: Colors.grey,
+                  //TODO: CHANGE TO ICON
                   child: Text("+",
                       style: TextStyle(color: Colors.grey, fontSize: 20.0)),
                   onPressed: () {},
@@ -253,7 +255,7 @@ class DashboardPage extends StatelessWidget {
           padding: EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0),
           width: 350.0,
           decoration: BoxDecoration(
-              color: Colors.pink,
+              color: AppColours().coral,
               borderRadius: BorderRadius.circular(50.0),
               border: Border.all(color: Colors.black, width: 1.0)),
           child: Text(

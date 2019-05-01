@@ -1,3 +1,4 @@
+import 'package:calorie_count/main.dart';
 import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,13 +21,13 @@ class QuestionPageState extends State<QuestionPage>
     with TickerProviderStateMixin {
   double age, height, weight;
   int currentIndex = 0;
-  String exerTimes, goal, gender, activityLevel, loseGain;
+  String exerTimes, goal, gender, activityLevel, loseGain, unit;
   bool completed = false;
 
-  List<String> questions = [
+   List<String> questions = [
     "How old are you?",
-    "How tall are you in centimeters?",
-    "How much do you weigh in kgs?",
+    "How tall are you in ?",
+    "How much do you weigh in ?",
     "How often do you exercise per week?",
     "How much weight do you want to gain/lose per week?",
     "What is your gender"
@@ -176,63 +177,65 @@ class QuestionPageState extends State<QuestionPage>
     final double _width = logicalSize.width;
 
     return Scaffold(
-        resizeToAvoidBottomPadding: false,
-        body: Center(
-          child: Container(
-            padding: EdgeInsets.all(16.0),
-            child: getPages(_width),
-            // child: _animateController.isCompleted
-            //     ? getPages(_width)
-            //     : AnimationBox(
-            //         controller: _animateController,
-            //         screenWidth: _width - 32.0,
-            //         onStartAnimation: () {
-            //           _startAnimation();
-            //         },
-            //       ),
-          ),
+      resizeToAvoidBottomPadding: false,
+      body: Center(
+        child: Container(
+          padding: EdgeInsets.all(16.0),
+          child: getPages(_width),
+          // child: _animateController.isCompleted
+          //     ? getPages(_width)
+          //     : AnimationBox(
+          //         controller: _animateController,
+          //         screenWidth: _width - 32.0,
+          //         onStartAnimation: () {
+          //           _startAnimation();
+          //         },
+          //       ),
         ),
-        bottomNavigationBar:
-            //_animateController.isCompleted ?
-            BottomAppBar(
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [BoxShadow(color: Colors.grey.withAlpha(200))]),
-            height: 50.0,
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  currentIndex += 1;
-                  //   if (currentIndex == 1) {
-                  //     _startSecondStepAnimation();
-                  //   } else if (currentIndex == 2) {
-                  //     _startThirdStepAnimation();
-                  //   } else if (currentIndex == 3) {
-                  //     _startFourStepAnimation();
-                  //   }
-                });
+      ),
+      bottomNavigationBar: currentIndex != 0
+          ?
+          //_animateController.isCompleted ?
+          BottomAppBar(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [BoxShadow(color: Colors.grey.withAlpha(200))]),
+                height: 50.0,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      currentIndex += 1;
+                      //   if (currentIndex == 1) {
+                      //     _startSecondStepAnimation();
+                      //   } else if (currentIndex == 2) {
+                      //     _startThirdStepAnimation();
+                      //   } else if (currentIndex == 3) {
+                      //     _startFourStepAnimation();
+                      //   }
+                    });
 
-                //When questionnaire is finished, user's calculate calorie intake
-                if (currentIndex == 7) {
-                  //make an object containing all the answers
-                  // QuestionAnswers calorieGoal = new QuestionAnswers(
-                  //     age, height, weight, gender, activityLevel, goal);
-                  // Calculator().calorieCalculator(calorieGoal);
-                  print("Finished");
-                  Navigator.pushNamed(context, '/results');
-                }
-              },
-              child: Center(
-                  child: Text(
-                currentIndex < 5 ? 'Continue' : 'Finish',
-                style: TextStyle(fontSize: 20.0, color: Colors.orangeAccent),
-              )),
-            ),
-          ),
-        )
-        // : null,
-        );
+                    //When questionnaire is finished, user's calculate calorie intake
+                    if (currentIndex == 7) {
+                      //make an object containing all the answers
+                      // QuestionAnswers calorieGoal = new QuestionAnswers(
+                      //     age, height, weight, gender, activityLevel, goal);
+                      // Calculator().calorieCalculator(calorieGoal);
+                      print("Finished");
+                      Navigator.pushNamed(context, '/results');
+                    }
+                  },
+                  child: Center(
+                      child: Text(
+                    currentIndex < 5 ? 'Continue' : 'Finish',
+                    style:
+                        TextStyle(fontSize: 20.0, color: Colors.orangeAccent),
+                  )),
+                ),
+              ),
+            )
+          : null,
+    );
   } //build
 
   Widget getPages(double _width) {
@@ -289,28 +292,65 @@ class QuestionPageState extends State<QuestionPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            Expanded(
-                child: Center(
-                    child: Text(
+            // Padding(padding: EdgeInsets.only(top: 16.0),),
+            Text(
               "Insert Logo",
               style: TextStyle(fontSize: 30.0),
-            ))),
+            ),
+            Padding(padding: EdgeInsets.only(bottom: 100.0)),
             Text(
               'Calorie Intake Calculator',
               style: TextStyle(
-                  color: Colors.orangeAccent,
+                  color: AppColours().coral,
                   fontWeight: FontWeight.bold,
                   fontSize: 24.0),
               textAlign: TextAlign.left,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0, bottom: 120.0),
-              child: Text(
-                'Please complete this quick questionnaire so we can determine the number of calories you should intake',
-                style: TextStyle(
-                  fontSize: 16.0,
-                ),
+            Padding(padding: EdgeInsets.only(bottom: 16.0)),
+            Text(
+              'Please complete this quick questionnaire so we can determine the number of calories you should intake',
+              style: TextStyle(
+                fontSize: 16.0,
               ),
+            ),
+            Padding(padding: EdgeInsets.only(bottom: 16.0)),
+            Container(
+              padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+              width: 150.0,
+              child: FlatButton(
+                  child: Text(
+                    "Metric",
+                    style: TextStyle(fontSize: 16.0, color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                  color: AppColours().coral,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0)),
+                  onPressed: () {
+                    setState(() {
+                      currentIndex += 1;
+                      unit = "Metric";
+                    });
+                  }),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+              width: 150.0,
+              child: FlatButton(
+                  child: Text(
+                    "Imperial",
+                    style: TextStyle(fontSize: 16.0, color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                  color: AppColours().coral,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0)),
+                  onPressed: () {
+                    setState(() {
+                      currentIndex += 1;
+                      unit = "Imperial";
+                    });
+                  }),
             )
           ],
         ),
@@ -327,7 +367,8 @@ class QuestionPageState extends State<QuestionPage>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Text(quesNum),
-            Container(margin: EdgeInsets.only(top: 16.0), child: Text(ques)),
+            Container(margin: EdgeInsets.only(top: 16.0), 
+            child: Text(_quesWithUnits(ques))),
             Container(
               margin: EdgeInsets.symmetric(vertical: 50.0),
               child: TextField(
@@ -352,6 +393,24 @@ class QuestionPageState extends State<QuestionPage>
       ),
     );
   } //inputQuestion
+
+//method to return the question with the correct units
+  String _quesWithUnits(String q) {
+    if (unit == "Metric") {
+      if (q == questions[1]) {
+        return "How tall are you in centimeters?";
+      } else if (q == questions[2]) {
+        return "How much do you weigh in kgs?";
+      }
+    } else if (unit == "Imperial") {
+      if (q == questions[1]) {
+        return "How tall are you in inches? (Note: 12 inches in a foot)";
+      } else if (q == questions[2]) {
+        return "How much do you weigh in pounds?";
+      }
+    }
+    return q;
+  }
 
   //function that sets a varaible depending on what question was asked
   _submitted(String a, String q) {
@@ -580,14 +639,15 @@ class QuestionPageState extends State<QuestionPage>
 
   //Widget that displays a back button in the top right corner of the screen
   Widget _backButton() {
-    if (currentIndex == 0) { //if on first page, hide button
+    if (currentIndex == 0) {
+      //if on first page, hide button
       return IconButton(
           icon: Icon(
             Icons.arrow_back,
             color: Colors.transparent,
           ),
           onPressed: () {});
-    } else { 
+    } else {
       //return a back button
       return IconButton(
           //back button
