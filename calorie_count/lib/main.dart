@@ -18,18 +18,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/dashboard',
+      initialRoute: '/questionnaire',
       routes: <String, WidgetBuilder>{
         '/': (context) => LogInScreen(),
         '/home': (context) => HomeScreen(),
         '/questionnaire': (context) => QuestionPage(),
-        'results': (context) => CalorieCalc(),
+        '/results': (context) => CalorieCalc(),
         '/dashboard': (context) => DashboardPage(),
       },
     );
+    
   }
 }
 
+//Creates a Google Sign In Account
 class LogInScreen extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = new GoogleSignIn();
@@ -51,15 +53,17 @@ class LogInScreen extends StatelessWidget {
     return user;
   } // sign in method
 
+  //Signs user out of Google
   void _signOut() {
     googleSignIn.signOut();
     print("User Signed out");
   }
 
+  //creates a Page containing the app name and sign in button
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: const Color(0xFF4C4B4B),
+      backgroundColor: AppColours().offBlack,
       body: new Padding(
         padding: const EdgeInsets.all(20.0),
         child: new Column(
@@ -82,7 +86,7 @@ class LogInScreen extends StatelessWidget {
                 _signIn()
                   .then((FirebaseUser user) => print(user)) //prints user information
                   .catchError((e) => print(e));
-             //   Navigator.pushNamed(context, '/questionnaire');
+                Navigator.pushNamed(context, '/questionnaire');
               },
               child: new Text("Sign In"),
             ),
@@ -90,7 +94,6 @@ class LogInScreen extends StatelessWidget {
             RaisedButton(
               onPressed: () {
                  _signOut();
-                //Navigator.pushNamed(context, '/questionnaire');
               },
               child: new Text("Sign Out"),
             ),
@@ -123,11 +126,18 @@ class HomeScreenState extends State<HomeScreen> {
         home: new Scaffold(
             body: PageView(
       children: <Widget>[
-        CameraPage(),
+      //  CameraPage(),
         DashboardPage(),
         ProgressPage(),
         SettingsPage(),
       ],
     )));
   }
+}
+
+//class that defines colours
+class AppColours {
+  final offBlack = const Color(0xFF4C4B4B);
+  final coral = const Color(0xFFEA7773);
+
 }

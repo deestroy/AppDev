@@ -1,4 +1,5 @@
 
+import 'package:calorie_count/main.dart';
 import 'package:flutter/material.dart';
 
 class CalorieCalc extends StatelessWidget {
@@ -8,11 +9,21 @@ class CalorieCalc extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold (
-      appBar: AppBar(
-        title: Text("Calorie Calc"),
-      ),
       body: Container(
-        child: Text("Daily calorie intake is $calorieIntake"),
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Text(
+                "Based on your answers, "
+              ),
+              decoration: BoxDecoration(
+                color: AppColours().offBlack,
+                
+              ),
+              
+            )
+          ],
+        ),
       ),
       );
   }
@@ -32,7 +43,7 @@ class QuestionAnswers {
     setActLvl(pa);
     setLoseGain(goal);
   }
-
+  //SETS VARIABLES PASSED THROUGH
   setAge(double a) {
     age = a;
   }
@@ -88,6 +99,7 @@ class QuestionAnswers {
     } 
   }
 
+  //FUNCTIONS TO GET VARIABLES
   getAge() {
     return age;
   }
