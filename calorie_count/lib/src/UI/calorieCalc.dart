@@ -40,7 +40,7 @@ class CalorieCalc extends StatelessWidget {
               padding: EdgeInsets.only(
                   top: 20.0, bottom: 20.0, left: 70.0, right: 70.0),
               child: Text(
-                Calculator().calories.toString(),
+                calorieIntake,
                 style: TextStyle(fontSize: 40.0, color: AppColours().offBlack),
               ),
               decoration: BoxDecoration(

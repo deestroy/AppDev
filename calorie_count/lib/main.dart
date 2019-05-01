@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/results',
+      initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (context) => LogInScreen(),
         '/home': (context) => HomeScreen(),
@@ -84,7 +84,7 @@ class LogInScreen extends StatelessWidget {
             RaisedButton(
               onPressed: () {
                 _signIn()
-            //      .then((FirebaseUser user) => print(user)) //prints user information
+                  .then((FirebaseUser user) => print(user)) //prints user information
                   .catchError((e) => print(e));
                 Navigator.pushNamed(context, '/questionnaire');
               },
@@ -112,13 +112,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  List<Widget> myPage = [
-    CameraPage(),
-    DashboardPage(),
-    ProgressPage(),
-    SettingsPage(),
-    QuestionPage()
-  ];
+  // List<Widget> myPage = [
+  //   CameraPage(),
+  //   DashboardPage(),
+  //   ProgressPage(),
+  //   SettingsPage(),
+  //   QuestionPage()
+  // ];
 
   @override
   Widget build(BuildContext context) {

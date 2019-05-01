@@ -218,9 +218,9 @@ class QuestionPageState extends State<QuestionPage>
                     //When questionnaire is finished, user's calculate calorie intake
                     if (currentIndex == 7) {
                       //make an object containing all the answers
-                      // QuestionAnswers calorieGoal = new QuestionAnswers(
-                      //     age, height, weight, gender, activityLevel, goal);
-                      // Calculator().calorieCalculator(calorieGoal);
+                      QuestionAnswers calorieGoal = new QuestionAnswers(
+                          age, height, weight, gender, activityLevel, goal);
+                      Calculator().calorieCalculator(calorieGoal, unit);
                       print("Finished");
                       Navigator.pushNamed(context, '/results');
                     }
