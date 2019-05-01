@@ -82,7 +82,6 @@ class DashboardPage extends StatelessWidget {
                   shape: new CircleBorder(),
                   borderSide: BorderSide(color: Colors.grey, width: 2.0),
                   highlightedBorderColor: Colors.grey,
-                  //TODO: CHANGE TO ICON
                   child: Text("+",
                       style: TextStyle(color: Colors.grey, fontSize: 20.0)),
                   onPressed: () {},
@@ -97,7 +96,7 @@ class DashboardPage extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    "Calorie Goal\tXX",
+                    "Calorie Goal\tXX", //TODO: Pull numbers
                     style: TextStyle(fontSize: 14.0),
                     textAlign: TextAlign.center,
                   ),

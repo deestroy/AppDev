@@ -1,3 +1,4 @@
+import 'package:calorie_count/auth.dart';
 import 'package:flutter/material.dart';
 
 class CameraPage extends StatelessWidget {
@@ -6,8 +7,26 @@ class CameraPage extends StatelessWidget {
     
     return new Scaffold(
         body: Container(
-            child: Center(
-      child: Text("camera"),
-    )));
+          child: Column(
+            
+            children: <Widget>[
+              Padding(padding: EdgeInsets.all(16.0),),
+              Center(
+                child: Text("camera"),
+              ),
+              RaisedButton(
+              onPressed: () {
+                 authService.signOut();
+              },
+              child: new Text("Sign Out"),
+            ),
+
+
+
+            ],
+          ),
+           
+        )
+           );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:calorie_count/main.dart';
 import 'package:flutter/material.dart';
 
+
 class CalorieCalc extends StatelessWidget {
-  String calorieIntake = Calculator().calories.toString();
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +40,14 @@ class CalorieCalc extends StatelessWidget {
               padding: EdgeInsets.only(
                   top: 20.0, bottom: 20.0, left: 70.0, right: 70.0),
               child: Text(
-                calorieIntake,
+                Calculator().getCalories(), //TODO: FIX
+
                 style: TextStyle(fontSize: 40.0, color: AppColours().offBlack),
               ),
               decoration: BoxDecoration(
                   border: Border.all(color: AppColours().offBlack),
                   borderRadius: BorderRadius.circular(15.0)),
             ),
-
             Container(
               width: 90.0,
               margin: EdgeInsets.only(left: 270.0, top: 290.0),
@@ -68,8 +68,9 @@ class CalorieCalc extends StatelessWidget {
         ),
       ),
     );
-  }
-}
+  } //build
+
+} //CalorieCalc
 
 //question object to be passed to make calculations
 class QuestionAnswers {
@@ -85,6 +86,7 @@ class QuestionAnswers {
     setActLvl(pa);
     setLoseGain(goal);
   }
+
   //SETS VARIABLES PASSED THROUGH
   setAge(double a) {
     age = a;
@@ -170,10 +172,10 @@ class QuestionAnswers {
 } //QuestionAnswers
 
 class Calculator {
-  int calories;
+  int calories = 0;
   double bmr;
 
-  calorieCalculator(QuestionAnswers ans, String unit) {
+  setCalories(QuestionAnswers ans, String unit) {
     //Metric Calculations
     if (unit == "Metric") {
       if (ans.getGender() == 0) {
@@ -185,6 +187,9 @@ class Calculator {
                 ans.getActLvl()) +
             ans.getLoseGain();
         calories = bmr.round();
+        if (calories < 1200) {
+          calories = 1200;
+        }
         print("This male should be consuming $calories calories");
       } else if (ans.getGender() == 1) {
         //female
@@ -195,6 +200,9 @@ class Calculator {
                 ans.getActLvl()) +
             ans.getLoseGain();
         calories = bmr.round();
+        if (calories < 1200) {
+          calories = 1200;
+        }
         print("This female should be consuming $calories calories");
       }
 
@@ -209,6 +217,9 @@ class Calculator {
                 ans.getActLvl()) +
             ans.getLoseGain();
         calories = bmr.round();
+        if (calories < 1200) {
+          calories = 1200;
+        }
         print("This male should be consuming $calories calories");
       } else if (ans.getGender() == 1) {
         //female
@@ -218,9 +229,17 @@ class Calculator {
                     (4.7 * ans.getAge())) *
                 ans.getActLvl()) +
             ans.getLoseGain();
-        calories = bmr.round();
+         calories = bmr.round();
+         if (calories < 1200) {
+          calories = 1200;
+        }
         print("This female should be consuming $calories calories");
       }
     }
   } //calorieCalculator
+
+  getCalories() {
+      print("Calories: " + calories.toString());
+      return calories.toString();
+  }
 } //Calculator

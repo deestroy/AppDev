@@ -217,11 +217,10 @@ class QuestionPageState extends State<QuestionPage>
 
                     //When questionnaire is finished, user's calculate calorie intake
                     if (currentIndex == 7) {
-                      //make an object containing all the answers
+                      //make an object containing all the answers to pass through
                       QuestionAnswers calorieGoal = new QuestionAnswers(
                           age, height, weight, gender, activityLevel, goal);
-                      Calculator().calorieCalculator(calorieGoal, unit);
-                      print("Finished");
+                      Calculator().setCalories(calorieGoal, unit);
                       Navigator.pushNamed(context, '/results');
                     }
                   },
@@ -239,7 +238,6 @@ class QuestionPageState extends State<QuestionPage>
   } //build
 
   Widget getPages(double _width) {
-    print(currentIndex);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -247,7 +245,6 @@ class QuestionPageState extends State<QuestionPage>
         _backButton(),
 
         //Padding(padding: EdgeInsets.only(bottom: 8.0)),
-
         // Container( //Bars on top
         //   margin: EdgeInsets.only(top: 30.0),
         //   height: 10.0,
