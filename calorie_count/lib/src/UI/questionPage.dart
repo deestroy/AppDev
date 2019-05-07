@@ -3,7 +3,6 @@ import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'dart:async';
 import 'dart:ui' as ui;
 
 class QuestionPage extends StatefulWidget {
@@ -23,8 +22,10 @@ class QuestionPageState extends State<QuestionPage>
   int currentIndex = 0;
   String exerTimes, goal, gender, activityLevel, loseGain, unit;
   bool completed = false;
+  final formKey = GlobalKey<FormState>();
+  bool _valid = false;
 
-   List<String> questions = [
+  List<String> questions = [
     "How old are you?",
     "How tall are you in ?",
     "How much do you weigh in ?",
@@ -55,121 +56,6 @@ class QuestionPageState extends State<QuestionPage>
 
   List<GenderQ> genderQuestion = [GenderQ("M", "Male"), GenderQ("F", "Female")];
 
-  // AnimationController _animateController;
-  // AnimationController _longPressController;
-  // AnimationController _secondStepController;
-  // AnimationController _thirdStepController;
-  // AnimationController _fourStepController;
-
-  // Animation<double> longPressAnimation;
-  // Animation<double> secondTranformAnimation;
-  // Animation<double> thirdTranformAnimation;
-  // Animation<double> fourTranformAnimation;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   _animateController = AnimationController(
-  //       duration: Duration(milliseconds: 2000), vsync: this);
-  //   _longPressController = AnimationController(
-  //       duration: Duration(milliseconds: 1000), vsync: this);
-  //   _secondStepController = AnimationController(
-  //       duration: Duration(milliseconds: 1000), vsync: this);
-  //   _thirdStepController = AnimationController(
-  //       duration: Duration(milliseconds: 1000), vsync: this);
-  //   _fourStepController = AnimationController(
-  //       duration: Duration(milliseconds: 1000), vsync: this);
-  //   longPressAnimation =
-  //       Tween<double>(begin: 1.0, end: 2.0).animate(CurvedAnimation(
-  //           parent: _longPressController,
-  //           curve: Interval(
-  //             0.1,
-  //             1.0,
-  //             curve: Curves.fastOutSlowIn,
-  //           )));
-
-  //   fourTranformAnimation =
-  //       Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-  //           parent: _fourStepController,
-  //           curve: Interval(
-  //             0.1,
-  //             1.0,
-  //             curve: Curves.fastOutSlowIn,
-  //           )));
-
-  //   secondTranformAnimation =
-  //       Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-  //           parent: _secondStepController,
-  //           curve: Interval(
-  //             0.1,
-  //             1.0,
-  //             curve: Curves.fastOutSlowIn,
-  //           )));
-
-  //   thirdTranformAnimation =
-  //       Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-  //           parent: _thirdStepController,
-  //           curve: Interval(
-  //             0.1,
-  //             1.0,
-  //             curve: Curves.fastOutSlowIn,
-  //           )));
-
-  //   _longPressController.addListener(() {
-  //     setState(() {});
-  //   });
-
-  //   _secondStepController.addListener(() {
-  //     setState(() {});
-  //   });
-
-  //   _thirdStepController.addListener(() {
-  //     setState(() {});
-  //   });
-
-  //   _fourStepController.addListener(() {
-  //     setState(() {});
-  //   });
-  // }
-
-  // @override
-  // void dispose() {
-  //   // TODO: implement dispose
-  //   _animateController.dispose();
-  //   _secondStepController.dispose();
-  //   _thirdStepController.dispose();
-  //   _fourStepController.dispose();
-  //   _longPressController.dispose();
-  //   super.dispose();
-  // }
-
-  // Future _startAnimation() async {
-  //   try {
-  //     await _animateController.forward().orCancel;
-  //     setState(() {});
-  //   } on TickerCanceled {}
-  // }
-
-  // Future _startSecondStepAnimation() async {
-  //   try {
-  //     await _secondStepController.forward().orCancel;
-  //   } on TickerCanceled {}
-  // }
-
-  // Future _startThirdStepAnimation() async {
-  //   try {
-  //     await _thirdStepController.forward().orCancel;
-  //   } on TickerCanceled {}
-  // }
-
-  // Future _startFourStepAnimation() async {
-  //   try {
-  //     await _fourStepController.forward().orCancel;
-  //   } on TickerCanceled {}
-  // }
-
-  ////////////////////////////////////// animaiton setup over
 
   @override
   Widget build(BuildContext context) {
@@ -182,15 +68,6 @@ class QuestionPageState extends State<QuestionPage>
         child: Container(
           padding: EdgeInsets.all(16.0),
           child: getPages(_width),
-          // child: _animateController.isCompleted
-          //     ? getPages(_width)
-          //     : AnimationBox(
-          //         controller: _animateController,
-          //         screenWidth: _width - 32.0,
-          //         onStartAnimation: () {
-          //           _startAnimation();
-          //         },
-          //       ),
         ),
       ),
       bottomNavigationBar: currentIndex != 0
@@ -204,16 +81,13 @@ class QuestionPageState extends State<QuestionPage>
                 height: 50.0,
                 child: GestureDetector(
                   onTap: () {
-                    setState(() {
-                      currentIndex += 1;
-                      //   if (currentIndex == 1) {
-                      //     _startSecondStepAnimation();
-                      //   } else if (currentIndex == 2) {
-                      //     _startThirdStepAnimation();
-                      //   } else if (currentIndex == 3) {
-                      //     _startFourStepAnimation();
-                      //   }
-                    });
+                    if (_valid) { //only let user continue if they answered the question
+                      setState(() {
+                        currentIndex += 1;
+                        _valid = false;
+                      
+                      });
+                    }
 
                     //When questionnaire is finished, user's calculate calorie intake
                     if (currentIndex == 7) {
@@ -243,28 +117,6 @@ class QuestionPageState extends State<QuestionPage>
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         _backButton(),
-
-        //Padding(padding: EdgeInsets.only(bottom: 8.0)),
-        // Container( //Bars on top
-        //   margin: EdgeInsets.only(top: 30.0),
-        //   height: 10.0,
-        //   child: Row(
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     mainAxisAlignment: MainAxisAlignment.start,
-        //     children: List.generate(6, (int index) { //CHANGED NUMBER OF BARS ON TOP
-        //       return Container(
-        //         decoration: BoxDecoration(
-        //           color:
-        //               index <= currentIndex ? Colors.orangeAccent : Colors.grey,
-        //           borderRadius: BorderRadius.all(Radius.circular(2.0)),
-        //         ),
-        //         height: 10.0,
-        //         width: (_width - 32.0 - 15.0) / 6.5,
-        //         margin: EdgeInsets.only(left: index == 0 ? 0.0 : 5.0),
-        //       );
-        //     }),
-        //   ),
-        // ),
 
         currentIndex == 0
             ? _firstPage()
@@ -364,32 +216,69 @@ class QuestionPageState extends State<QuestionPage>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Text(quesNum),
-            Container(margin: EdgeInsets.only(top: 16.0), 
-            child: Text(_quesWithUnits(ques))),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 50.0),
-              child: TextField(
-                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-                  maxLength: 3,
-                  controller: controllerName,
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(45.45),
-                      ),
-                    ),
-                  ),
-                  onSubmitted: (String a) {
-                    _submitted(a, ques);
-                  }),
-            ),
+                margin: EdgeInsets.only(top: 16.0),
+                child: Text(_quesWithUnits(ques))),
+            Container(
+                margin: EdgeInsets.symmetric(vertical: 50.0),
+                //Form that validates input
+                child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: <Widget>[
+                        TextFormField(
+                            inputFormatters: [
+                              WhitelistingTextInputFormatter.digitsOnly
+                            ],
+                            maxLength: 3,
+                            controller: controllerName,
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.center,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Required';
+                              }
+                            },
+                            decoration: InputDecoration(
+                              border: new OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                  const Radius.circular(45.45),
+                                ),
+                              ),
+                            ),
+                            onFieldSubmitted: (String a) {
+                              _submitted(a, ques, controllerName);
+                            }),
+                      ],
+                    ))),
           ],
         ),
       ),
     );
   } //inputQuestion
+
+  //function that sets a varaible depending on what question was asked
+  _submitted(String a, String q, TextEditingController controller) {
+    final form = formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      if (q == questions[0]) {
+        setState(() {
+          age = double.parse(a);
+          print("Age is $age");
+          _valid = true; //user answered so they can now continue to the next Q
+        });
+      } else if (q == questions[1]) {
+        height = double.parse(a);
+        print("Height is $height");
+        _valid = true; //user answered so they can now continue to the next Q
+      } else if (q == questions[2]) {
+        weight = double.parse(a);
+        print("Weight is $weight");
+        _valid = true; //user answered so they can now continue to the next Q
+      }
+    }
+  }
 
 //method to return the question with the correct units
   String _quesWithUnits(String q) {
@@ -407,23 +296,6 @@ class QuestionPageState extends State<QuestionPage>
       }
     }
     return q;
-  }
-
-  //function that sets a varaible depending on what question was asked
-  _submitted(String a, String q) {
-    //TODO: make sure textfield is not empty
-    if (q == questions[0]) {
-      setState(() {
-        age = double.parse(a);
-        print("Age is $age");
-      });
-    } else if (q == questions[1]) {
-      height = double.parse(a);
-      print("Height is $height");
-    } else if (q == questions[2]) {
-      weight = double.parse(a);
-      print("Weight is $weight");
-    }
   }
 
   //Returns a Widget containing the gender question w/ a card and radio buttons
@@ -452,6 +324,7 @@ class QuestionPageState extends State<QuestionPage>
                             setState(() {
                               gender = using.identifier;
                               print(gender);
+                              _valid = true;
                             });
                           },
                           child: Container(
@@ -522,6 +395,7 @@ class QuestionPageState extends State<QuestionPage>
                               exerTimes = using.identifier;
                               activityLevel = using.identifier;
                               print(exerTimes);
+                              _valid = true; //user answered so they can now continue to the next Q
                             });
                           },
                           child: Container(
@@ -571,8 +445,6 @@ class QuestionPageState extends State<QuestionPage>
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          //  child: ListView(
-          //    shrinkWrap: true,
           children: <Widget>[
             Container(
               margin: EdgeInsets.only(top: 34.0),
@@ -593,6 +465,7 @@ class QuestionPageState extends State<QuestionPage>
                             goal = using.identifier;
                             loseGain = using.identifier;
                             print(goal);
+                            _valid = true; //user answered so they can now continue to the next Q
                           });
                         },
                         child: Container(
@@ -683,265 +556,3 @@ class GoalQ {
   final String displayContent;
   GoalQ(this.identifier, this.displayContent);
 }
-
-//MAIN PAGE AND ANIMATIONS
-// class AnimationBox extends StatelessWidget {
-//   AnimationBox(
-//       {Key key, this.controller, this.screenWidth, this.onStartAnimation})
-//       : width = Tween<double>(
-//           begin: screenWidth,
-//           end: 40.0,
-//         ).animate(
-//           CurvedAnimation(
-//             parent: controller,
-//             curve: Interval(
-//               0.1,
-//               0.3,
-//               curve: Curves.fastOutSlowIn,
-//             ),
-//           ),
-//         ),
-//         alignment = Tween<AlignmentDirectional>(
-//           begin: AlignmentDirectional.bottomCenter,
-//           end: AlignmentDirectional.topStart,
-//         ).animate(
-//           CurvedAnimation(
-//             parent: controller,
-//             curve: Interval(
-//               0.3,
-//               0.6,
-//               curve: Curves.fastOutSlowIn,
-//             ),
-//           ),
-//         ),
-//         radius = BorderRadiusTween(
-//           begin: BorderRadius.circular(20.0),
-//           end: BorderRadius.circular(2.0),
-//         ).animate(
-//           CurvedAnimation(
-//             parent: controller,
-//             curve: Interval(
-//               0.6,
-//               0.8,
-//               curve: Curves.ease,
-//             ),
-//           ),
-//         ),
-//         height = Tween<double>(
-//           begin: 40.0,
-//           end: 0.0,
-//         ).animate(
-//           CurvedAnimation(
-//             parent: controller,
-//             curve: Interval(
-//               0.3,
-//               0.8,
-//               curve: Curves.ease,
-//             ),
-//           ),
-//         ),
-//         movement = EdgeInsetsTween(
-//           begin: EdgeInsets.only(top: 0.0),
-//           end: EdgeInsets.only(top: 30.0),
-//         ).animate(
-//           CurvedAnimation(
-//             parent: controller,
-//             curve: Interval(
-//               0.3,
-//               0.6,
-//               curve: Curves.fastOutSlowIn,
-//             ),
-//           ),
-//         ),
-//         scale = Tween<double>(
-//           begin: 1.0,
-//           end: 0.0,
-//         ).animate(
-//           CurvedAnimation(
-//             parent: controller,
-//             curve: Interval(
-//               0.8,
-//               1.0,
-//               curve: Curves.fastOutSlowIn,
-//             ),
-//           ),
-//         ),
-//         opacity = Tween<double>(
-//           begin: 1.0,
-//           end: 0.0,
-//         ).animate(
-//           CurvedAnimation(
-//             parent: controller,
-//             curve: Interval(
-//               0.8,
-//               1.0,
-//               curve: Curves.fastOutSlowIn,
-//             ),
-//           ),
-//         ),
-//         numberOfStep = IntTween(
-//           begin: 1,
-//           end: 6, //
-//         ).animate(
-//           CurvedAnimation(
-//             parent: controller,
-//             curve: Interval(
-//               0.8,
-//               1.0,
-//               curve: Curves.fastOutSlowIn,
-//             ),
-//           ),
-//         ),
-//         super(key: key);
-
-//   final VoidCallback onStartAnimation;
-//   final Animation<double> controller;
-//   final Animation<double> width;
-//   final Animation<double> height;
-//   final Animation<AlignmentDirectional> alignment;
-//   final Animation<BorderRadius> radius;
-//   final Animation<EdgeInsets> movement;
-//   final Animation<double> opacity;
-//   final Animation<double> scale;
-//   final Animation<int> numberOfStep;
-//   final double screenWidth;
-//   final double overral = 3.0;
-
-//   @override
-//   Widget build(BuildContext context) => AnimatedBuilder(
-//         animation: controller,
-//         builder: (BuildContext context, Widget child) {
-//           return Stack(
-//             alignment: alignment.value,
-//             children: <Widget>[
-//               Opacity(
-//                 opacity: 1.0 - opacity.value,
-//                 child: Column(
-//                   children: <Widget>[
-//                     Container(
-// //                color: Colors.blue,
-//                       margin: EdgeInsets.only(top: 30.0),
-//                       height: 10.0,
-//                       child: Row(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         mainAxisAlignment: MainAxisAlignment.start,
-//                         children:
-//                             List.generate(numberOfStep.value, (int index) {
-//                           return Container(
-//                             decoration: BoxDecoration(
-// //                    color: Colors.orangeAccent,
-//                               color: index == 0
-//                                   ? Colors.orangeAccent
-//                                   : Colors.grey,
-//                               borderRadius:
-//                                   BorderRadius.all(Radius.circular(2.0)),
-//                             ),
-//                             height: 10.0,
-//                             //   width: (screenWidth - 15.0) / 5.0,
-//                             width: (screenWidth - 32.0 - 15.0) / 5.8,
-//                             margin:
-//                                 EdgeInsets.only(left: index == 0 ? 0.0 : 5.0),
-//                           );
-//                         }),
-//                       ),
-//                     ),
-// //                   Expanded(
-// //                     child: Container(
-// // //                color: Colors.blue,
-// //                       margin: EdgeInsets.only(top: 34.0),
-// // //                height: 10.0,
-// //                       child: Column(
-// //                         crossAxisAlignment: CrossAxisAlignment.stretch,
-// //                         mainAxisAlignment: MainAxisAlignment.start,
-// //                         children: <Widget>[
-// //                           Text('Question 1'),
-// //                           Container(
-// //                               margin: EdgeInsets.only(top: 16.0),
-// //                               child: Text('How old are you?')),
-// //                           // Container(
-// //                           //   margin: EdgeInsets.symmetric(vertical: 50.0),
-// //                           //   child: Text(
-// //                           //     'Good',
-// //                           //     style: TextStyle(
-// //                           //         color: Colors.orangeAccent,
-// //                           //         fontWeight: FontWeight.bold,
-// //                           //         fontSize: 30.0),
-// //                           //     textAlign: TextAlign.center,
-// //                           //   ),
-// //                           // ),
-// //                         ],
-// //                       ),
-// //                     ),
-// //                   ),
-//                   ],
-//                 ),
-//               ),
-//               Opacity(
-//                 opacity:
-//                     controller.status == AnimationStatus.dismissed ? 1.0 : 0.0,
-//                 child: Column(
-//                   mainAxisAlignment: MainAxisAlignment.end,
-//                   children: <Widget>[
-//                     Expanded(
-//                         child: Center(
-//                             child: Text(
-//                       "Insert Logo",
-//                       style: TextStyle(fontSize: 30.0),
-//                     ))),
-//                     Text(
-//                       'Calorie Intake Calculator',
-//                       style: TextStyle(
-//                           color: Colors.orangeAccent,
-//                           fontWeight: FontWeight.bold,
-//                           fontSize: 24.0),
-//                       textAlign: TextAlign.left,
-//                     ),
-//                     Padding(
-//                       padding: const EdgeInsets.only(top: 16.0, bottom: 120.0),
-//                       child: Text(
-//                         'Please complete this quick questionnaire so we can determine the number of calories you should intake',
-//                         style: TextStyle(
-//                           fontSize: 16.0,
-//                         ),
-//                       ),
-//                     )
-//                   ],
-//                 ),
-//               ),
-//               Opacity(
-//                 opacity: opacity.value,
-//                 child: GestureDetector(
-//                   onTap: onStartAnimation,
-//                   child: Transform.scale(
-//                     scale: scale.value,
-//                     child: Container(
-//                       margin: movement.value,
-//                       width: width.value,
-//                       child: GestureDetector(
-//                         child: Container(
-//                           height: height.value,
-//                           decoration: BoxDecoration(
-//                               color: Colors.orangeAccent,
-//                               borderRadius: radius.value),
-//                           child: Center(
-//                             child:
-//                                 controller.status == AnimationStatus.dismissed
-//                                     ? Text(
-//                                         'Take the questionnaire',
-//                                         style: TextStyle(
-//                                             color: Colors.white,
-//                                             fontSize: 20.0),
-//                                       )
-//                                     : null,
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           );
-//         },
-//       );
-// }

@@ -1,4 +1,3 @@
-import 'package:calorie_count/auth.dart';
 import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:calorie_count/src/UI/loginPage.dart';
 import 'package:calorie_count/src/UI/rootPage.dart';
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/',
+      initialRoute: '/dashboard',
       routes: <String, WidgetBuilder>{
         '/': (context) => RootPage(),
         '/login': (context) => LogInPage(),
