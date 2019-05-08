@@ -8,6 +8,7 @@ class DashboardPage extends StatelessWidget {
     return new Scaffold(
         body: Container(
       child: SingleChildScrollView(
+        physics: ClampingScrollPhysics(),
         child: Column(
           children: <Widget>[
             Row(
@@ -204,6 +205,7 @@ class DashboardPage extends StatelessWidget {
                             )))
               ],
             ),
+            Padding(padding: EdgeInsets.only(top: 8.0))
           ],
         ),
       ),
@@ -211,7 +213,6 @@ class DashboardPage extends StatelessWidget {
   } //build 
 
   _foodList(List food) {
-    print(breakfastData);
     return ListView.builder(
       padding: EdgeInsets.all(0.0),
       physics: NeverScrollableScrollPhysics(),
