@@ -1,5 +1,7 @@
+import 'package:calorie_count/auth.dart';
 import 'package:calorie_count/main.dart';
 import 'package:calorie_count/src/UI/calorieCalc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -24,6 +26,7 @@ class QuestionPageState extends State<QuestionPage>
   bool completed = false;
   final formKey = GlobalKey<FormState>();
   bool _valid = false;
+  CrudMethods crudObj = new CrudMethods();
 
   List<String> questions = [
     "How old are you?",
@@ -56,6 +59,13 @@ class QuestionPageState extends State<QuestionPage>
 
   List<GenderQ> genderQuestion = [GenderQ("M", "Male"), GenderQ("F", "Female")];
 
+@override
+  void dispose() {
+    ageController.dispose();
+    heightController.dispose();
+    weightController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,20 +91,22 @@ class QuestionPageState extends State<QuestionPage>
                 height: 50.0,
                 child: GestureDetector(
                   onTap: () {
-                    if (_valid) { //only let user continue if they answered the question
+                    if (_valid && currentIndex < 7) { //only let user continue if they answered the question
                       setState(() {
                         currentIndex += 1;
                         _valid = false;
-                      
                       });
                     }
 
                     //When questionnaire is finished, user's calculate calorie intake
                     if (currentIndex == 7) {
+                      
                       //make an object containing all the answers to pass through
                       QuestionAnswers calorieGoal = new QuestionAnswers(
                           age, height, weight, gender, activityLevel, goal);
                       Calculator().setCalories(calorieGoal, unit);
+                      crudObj.addData(calorieGoal);
+                     // authService.writeAnswersDB(FirebaseAuth.currentUser(), calorieGoal);
                       Navigator.pushNamed(context, '/results');
                     }
                   },
