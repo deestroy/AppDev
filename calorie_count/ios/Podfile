@@ -1,5 +1,9 @@
 # Uncomment this line to define a global platform for your project
+<<<<<<< HEAD
 platform :ios, '12.1'
+=======
+platform :ios, '9.0'
+>>>>>>> 4c0649586da41888418ab52dcb15e69dde11caac
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -67,3 +71,5 @@ post_install do |installer|
     end
   end
 end
+
+pod 'Firebase/MLVisionLabelModel'
