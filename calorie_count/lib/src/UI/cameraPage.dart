@@ -34,12 +34,6 @@ class CameraPageState extends State<CameraPage> {
     super.dispose();
   }
 
-  // @override
-  // void dispose() {
-  //   controller?.dispose();
-  //   super.dispose();
-  // }
-
 @override
   Widget build(BuildContext context) {
     if (!controller.value.isInitialized) {

@@ -23,12 +23,10 @@ class QuestionPageState extends State<QuestionPage>
   double age, height, weight;
   int currentIndex = 0;
   String exerTimes, goal, gender, activityLevel, loseGain, unit;
-  bool completed = false;
+  bool completed, _valid = false;
   final formKey = GlobalKey<FormState>();
-  bool _valid = false;
-  CrudMethods crudObj = new CrudMethods();
-
-  List<String> questions = [
+  
+  List questions = [
     "How old are you?",
     "How tall are you in ?",
     "How much do you weigh in ?",
@@ -105,7 +103,7 @@ class QuestionPageState extends State<QuestionPage>
                       QuestionAnswers calorieGoal = new QuestionAnswers(
                           age, height, weight, gender, activityLevel, goal);
                       Calculator().setCalories(calorieGoal, unit);
-                      crudObj.addData(calorieGoal);
+                      
                      // authService.writeAnswersDB(FirebaseAuth.currentUser(), calorieGoal);
                       Navigator.pushNamed(context, '/results');
                     }
@@ -129,7 +127,6 @@ class QuestionPageState extends State<QuestionPage>
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         _backButton(),
-
         currentIndex == 0
             ? _firstPage()
             : currentIndex == 1

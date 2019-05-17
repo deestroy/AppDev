@@ -1,10 +1,14 @@
 import 'package:calorie_count/main.dart';
 import 'package:calorie_count/src/foodData.dart';
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 
 class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final ui.Size logicalSize = MediaQuery.of(context).size;
+    final double screenWidth = logicalSize.width;
+
     return new Scaffold(
         body: Container(
       child: SingleChildScrollView(
@@ -17,13 +21,15 @@ class DashboardPage extends StatelessWidget {
                 Padding(padding: EdgeInsets.only(bottom: 70.0)),
                 Stack(
                   children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                      width: 375.0,
-                      child: Text(
-                        "Food Log",
-                        style: TextStyle(fontSize: 24.0),
-                        textAlign: TextAlign.center,
+                    Center(
+                      child: Container(
+                        padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                        width: screenWidth,
+                        child: Text(
+                          "Food Log",
+                          style: TextStyle(fontSize: 24.0),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                     Positioned(
@@ -37,7 +43,9 @@ class DashboardPage extends StatelessWidget {
                         borderSide: BorderSide(color: Colors.black, width: 2.0),
                         highlightedBorderColor: Colors.grey,
                         // child: user profile picture,
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/setting');
+                        },
                       ),
                     )
                   ],
@@ -136,24 +144,22 @@ class DashboardPage extends StatelessWidget {
             Padding(padding: EdgeInsets.only(bottom: 12.0)),
 
             /////////////////
-            _header("Breakfast"),
+            _header("Breakfast", screenWidth),
             Row(
               children: <Widget>[
                 Expanded(
                     child: Padding(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
                         child: Container(
-                          height: 73.0 * breakfastData.length,
-                          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.0),
-                              border: Border.all(color: Colors.grey)),
-                            child: _foodList(breakfastData)
-                          
-                        ))),
+                            height: 73.0 * breakfastData.length,
+                            padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                border: Border.all(color: Colors.grey)),
+                            child: _foodList(breakfastData)))),
               ],
             ),
-            _header("Lunch"),
+            _header("Lunch", screenWidth),
             Row(
               //diplays food eaten during lunch
               children: <Widget>[
@@ -166,11 +172,10 @@ class DashboardPage extends StatelessWidget {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15.0),
                                 border: Border.all(color: Colors.grey)),
-                            child: _foodList(lunchData)
-                            ))),
+                            child: _foodList(lunchData)))),
               ],
             ),
-            _header("Dinner"),
+            _header("Dinner", screenWidth),
             Row(
               //diplays food eaten
               children: <Widget>[
@@ -178,17 +183,15 @@ class DashboardPage extends StatelessWidget {
                     child: Padding(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
                         child: Container(
-                          height: 73.0 * dinnerData.length,
-                          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.0),
-                              border: Border.all(color: Colors.grey)),
-                            child: _foodList(dinnerData)
-                          
-                        ))),
+                            height: 73.0 * dinnerData.length,
+                            padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                border: Border.all(color: Colors.grey)),
+                            child: _foodList(dinnerData)))),
               ],
             ),
-            _header("Snack"),
+            _header("Snack", screenWidth),
             Row(
               //diplays food eaten as snacks
               children: <Widget>[
@@ -201,8 +204,7 @@ class DashboardPage extends StatelessWidget {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15.0),
                                 border: Border.all(color: Colors.grey)),
-                            child: _foodList(snackData) 
-                            )))
+                            child: _foodList(snackData))))
               ],
             ),
             Padding(padding: EdgeInsets.only(top: 8.0))
@@ -210,7 +212,7 @@ class DashboardPage extends StatelessWidget {
         ),
       ),
     ));
-  } //build 
+  } //build
 
   _foodList(List food) {
     return ListView.builder(
@@ -244,14 +246,14 @@ class DashboardPage extends StatelessWidget {
   }
 
   //returns a Widget that displays title of meal and a plus button to add more meals
-  _header(String mealTime) {
+  _header(String mealTime, double screenWidth) {
     return Padding(
         padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
         child: Stack(
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(top: 8.0, bottom: 8.0, left: 16.0),
-              width: 350.0,
+              width: screenWidth - 20.0,
               decoration: BoxDecoration(
                   color: AppColours().coral,
                   borderRadius: BorderRadius.circular(50.0),
@@ -281,17 +283,3 @@ class DashboardPage extends StatelessWidget {
         ));
   }
 } //Dashboard page
-
-// class BreaskfastFood {
-//   String foodName;
-//   int calories;
-//   int servingSize;
-
-//   BreaskfastFood({this.foodName, this.calories, this.servingSize});
-// }
-
-// var breakfastData = <BreaskfastFood>[
-//   BreaskfastFood(foodName: "Medium Banana", calories: 100, servingSize: 100),
-//   BreaskfastFood(foodName: "Raspberry", calories: 80, servingSize: 50),
-//   BreaskfastFood(foodName: "Boiled Egg", calories: 100, servingSize: 140),
-// ];

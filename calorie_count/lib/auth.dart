@@ -86,10 +86,6 @@ class AuthService {
 
   }
 
-  getUser() {
-    
-  }
-
 } //AuthService
 
 final AuthService authService = AuthService();
@@ -103,22 +99,29 @@ class CrudMethods {
     }
   }
 
-  Future <void> addData(QuestionAnswers ans) async {
-    print (Firestore.instance);
-    Map answers = {
-     // 'uid': FirebaseAuth.instance.currentUser().uid,
-      'age': ans.getAge(),
-      'height': ans.getHeight(),
-      'weight': ans.getWeight(),
-      'activityLevel': ans.getActLvl(),
-      'goal': ans.getLoseGain(),
-      'gender': ans.getGender(),
-    };
+  // Future <void> addData(QuestionAnswers ans) async {
+  //   print (Firestore.instance);
+  //   Map answers = {
+  //    // 'uid': FirebaseAuth.instance.currentUser().uid,
+  //     'age': ans.getAge(),
+  //     'height': ans.getHeight(),
+  //     'weight': ans.getWeight(),
+  //     'activityLevel': ans.getActLvl(),
+  //     'goal': ans.getLoseGain(),
+  //     'gender': ans.getGender(),
+  //   };
 
-    if (isLoggedIn()) {
-      Firestore.instance.collection('questionnaire').add(answers).catchError((e) {
-        print (e);
-      });
-    }
-  }
+  //   if (isLoggedIn()) {
+  //     Firestore.instance.collection('questionnaire').add(answers).catchError((e) {
+  //       print (e);
+  //     });
+  //   }
+  // }
+}
+
+class QuestionnaireDB {
+  final Firestore _db = Firestore.instance;
+  
+
+
 }

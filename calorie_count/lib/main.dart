@@ -1,6 +1,7 @@
 import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:calorie_count/src/UI/loginPage.dart';
 import 'package:calorie_count/src/UI/rootPage.dart';
+import 'package:calorie_count/src/UI/settingPage.dart';
 import 'package:flutter/material.dart';
 import './src/UI/questionPage.dart';
 import './src/UI/dashboardPage.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     initialRoute: '/',
+     initialRoute: '/setting',
       routes: <String, WidgetBuilder>{
         '/': (context) => RootPage(),
         '/login': (context) => LogInPage(),
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         '/questionnaire': (context) => QuestionPage(),
         '/results': (context) => CalorieCalc(),
         '/dashboard': (context) => DashboardPage(),
+        '/setting': (context) => SettingPage(),
       },
     );
   }//build
@@ -50,7 +52,6 @@ class HomePageState extends State<HomePage> {
         home: new Scaffold(
             body: PageView(
       children: <Widget>[
-        
         DashboardPage(),
         CameraPage(widget.cameras),
         ProgressPage(),
