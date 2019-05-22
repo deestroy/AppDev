@@ -270,6 +270,7 @@ class DashboardPage extends StatelessWidget {
               top: 5.0,
               bottom: 5.0,
               child: FloatingActionButton(
+                heroTag: mealTime,
                 backgroundColor: Colors.white,
                 elevation: 0.0,
                 child: Text(

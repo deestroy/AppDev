@@ -1,12 +1,81 @@
 import 'package:calorie_count/main.dart';
+import 'package:calorie_count/src/UI/questionPage.dart';
 import 'package:flutter/material.dart';
 
-
 class CalorieCalc extends StatelessWidget {
+  QuestionAnswers ans;
+  var units;
+  CalorieCalc({this.ans, this.units});
 
+  int calories;
+  double bmr;
+  
+  setCalories(QuestionAnswers ans, String unit) {
+    //Metric Calculations
+    if (unit == "Metric") {
+      if (ans.getGender() == 0) {
+        //male
+        bmr = ((66.5 +
+                    (13.75 * ans.getWeight()) +
+                    (5.003 * ans.getHeight()) -
+                    (6.775 * ans.getAge())) *
+                ans.getActLvl()) +
+            ans.getLoseGain();
+          calories = bmr.round();
+        if (calories < 1200) {
+          calories = 1200;
+        }
+        print("This male should be consuming $calories calories");
+      } else if (ans.getGender() == 1) {
+        //female
+        bmr = ((655.1 +
+                    (9.563 * ans.getWeight()) +
+                    (1.85 * ans.getHeight()) -
+                    (4.676 * ans.getAge())) *
+                ans.getActLvl()) +
+            ans.getLoseGain();
+        calories = bmr.round();
+        if (calories < 1200) {
+          calories = 1200;
+        }
+        print("This female should be consuming $calories calories");
+      }
+    } //Imperial calculations
+    else if (unit == "Imperial") {
+      if (ans.getGender() == 0) {
+        //male
+        bmr = ((66.0 +
+                    (6.23 * ans.getWeight()) +
+                    (12.7 * ans.getHeight()) -
+                    (6.8 * ans.getAge())) *
+                ans.getActLvl()) +
+            ans.getLoseGain();
+        calories = bmr.round();
+        if (calories < 1200) {
+          calories = 1200;
+        }
+        print("This male should be consuming $calories calories");
+      } else if (ans.getGender() == 1) {
+        //female
+        bmr = ((655.0 +
+                    (4.35 * ans.getWeight()) +
+                    (4.7 * ans.getHeight()) -
+                    (4.7 * ans.getAge())) *
+                ans.getActLvl()) +
+            ans.getLoseGain();
+         calories = bmr.round();
+         if (calories < 1200) {
+          calories = 1200;
+        }
+        print("This female should be consuming $calories calories");
+      } 
+    }
+  } //setCalories
+ 
   @override
   Widget build(BuildContext context) {
-   
+    print("building results");
+    setCalories(ans, units);
     return Scaffold(
       body: Container(
         child: Column(
@@ -35,13 +104,12 @@ class CalorieCalc extends StatelessWidget {
             Padding(padding: EdgeInsets.all(32.0)),
             // ListWheelScrollView(
 
-            // )
+            // ),
             Container(
               padding: EdgeInsets.only(
                   top: 20.0, bottom: 20.0, left: 70.0, right: 70.0),
               child: Text(
-                Calculator().getCalories(), //TODO: FIX
-
+                calories.toString(),
                 style: TextStyle(fontSize: 40.0, color: AppColours().offBlack),
               ),
               decoration: BoxDecoration(
@@ -69,22 +137,20 @@ class CalorieCalc extends StatelessWidget {
       ),
     );
   } //build
-
 } //CalorieCalc
 
 //question object to be passed to make calculations
 class QuestionAnswers {
   double age, height, weight, gender, activitylvl, loseGain;
 
-  // constructor
   QuestionAnswers(
       double a, double h, double w, String gen, String pa, String goal) {
-    setAge(a);
-    setHeight(h);
-    setWeight(w);
-    setGender(gen);
-    setActLvl(pa);
-    setLoseGain(goal);
+    this.setAge(a);
+    this.setHeight(h);
+    this.setWeight(w);
+    this.setGender(gen);
+    this.setActLvl(pa);
+    this.setLoseGain(goal);
   }
 
   //SETS VARIABLES PASSED THROUGH
@@ -170,76 +236,3 @@ class QuestionAnswers {
     return loseGain;
   }
 } //QuestionAnswers
-
-class Calculator {
-  int calories = 0;
-  double bmr;
-
-  setCalories(QuestionAnswers ans, String unit) {
-    //Metric Calculations
-    if (unit == "Metric") {
-      if (ans.getGender() == 0) {
-        //male
-        bmr = ((66.5 +
-                    (13.75 * ans.getWeight()) +
-                    (5.003 * ans.getHeight()) -
-                    (6.775 * ans.getAge())) *
-                ans.getActLvl()) +
-            ans.getLoseGain();
-        calories = bmr.round();
-        if (calories < 1200) {
-          calories = 1200;
-        }
-        print("This male should be consuming $calories calories");
-      } else if (ans.getGender() == 1) {
-        //female
-        bmr = ((655.1 +
-                    (9.563 * ans.getWeight()) +
-                    (1.85 * ans.getHeight()) -
-                    (4.676 * ans.getAge())) *
-                ans.getActLvl()) +
-            ans.getLoseGain();
-        calories = bmr.round();
-        if (calories < 1200) {
-          calories = 1200;
-        }
-        print("This female should be consuming $calories calories");
-      }
-
-      //Imperial calculations
-    } else if (unit == "Imperial") {
-      if (ans.getGender() == 0) {
-        //male
-        bmr = ((66.0 +
-                    (6.23 * ans.getWeight()) +
-                    (12.7 * ans.getHeight()) -
-                    (6.8 * ans.getAge())) *
-                ans.getActLvl()) +
-            ans.getLoseGain();
-        calories = bmr.round();
-        if (calories < 1200) {
-          calories = 1200;
-        }
-        print("This male should be consuming $calories calories");
-      } else if (ans.getGender() == 1) {
-        //female
-        bmr = ((655.0 +
-                    (4.35 * ans.getWeight()) +
-                    (4.7 * ans.getHeight()) -
-                    (4.7 * ans.getAge())) *
-                ans.getActLvl()) +
-            ans.getLoseGain();
-         calories = bmr.round();
-         if (calories < 1200) {
-          calories = 1200;
-        }
-        print("This female should be consuming $calories calories");
-      }
-    }
-  } //calorieCalculator
-
-  getCalories() {
-      print("Calories: " + calories.toString());
-      return calories.toString();
-  }
-} //Calculator

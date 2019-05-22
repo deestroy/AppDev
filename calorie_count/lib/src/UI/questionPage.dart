@@ -4,7 +4,6 @@ import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'dart:ui' as ui;
 
 class QuestionPage extends StatefulWidget {
@@ -25,6 +24,8 @@ class QuestionPageState extends State<QuestionPage>
   String exerTimes, goal, gender, activityLevel, loseGain, unit;
   bool completed, _valid = false;
   final formKey = GlobalKey<FormState>();
+  AppColours c = new AppColours();
+  //QuestionAnswers calorieGoal = new QuestionAnswers();
   
   List questions = [
     "How old are you?",
@@ -96,23 +97,20 @@ class QuestionPageState extends State<QuestionPage>
                       });
                     }
 
-                    //When questionnaire is finished, user's calculate calorie intake
+                    //When questionnaire is finished, calculate user's calorie intake
                     if (currentIndex == 7) {
-                      
                       //make an object containing all the answers to pass through
-                      QuestionAnswers calorieGoal = new QuestionAnswers(
+                       QuestionAnswers calorieGoal =  new QuestionAnswers(
                           age, height, weight, gender, activityLevel, goal);
-                      Calculator().setCalories(calorieGoal, unit);
                       
-                     // authService.writeAnswersDB(FirebaseAuth.currentUser(), calorieGoal);
-                      Navigator.pushNamed(context, '/results');
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => new CalorieCalc(ans: calorieGoal, units: unit)));
                     }
                   },
                   child: Center(
                       child: Text(
                     currentIndex < 5 ? 'Continue' : 'Finish',
                     style:
-                        TextStyle(fontSize: 20.0, color: Colors.orangeAccent),
+                        TextStyle(fontSize: 20.0, color: c.coral),
                   )),
                 ),
               ),
@@ -159,7 +157,7 @@ class QuestionPageState extends State<QuestionPage>
             Text(
               'Calorie Intake Calculator',
               style: TextStyle(
-                  color: AppColours().coral,
+                  color: c.coral,
                   fontWeight: FontWeight.bold,
                   fontSize: 24.0),
               textAlign: TextAlign.left,
@@ -181,7 +179,7 @@ class QuestionPageState extends State<QuestionPage>
                     style: TextStyle(fontSize: 16.0, color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
-                  color: AppColours().coral,
+                  color: c.coral,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0)),
                   onPressed: () {
@@ -200,7 +198,7 @@ class QuestionPageState extends State<QuestionPage>
                     style: TextStyle(fontSize: 16.0, color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
-                  color: AppColours().coral,
+                  color: c.coral,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0)),
                   onPressed: () {
@@ -339,14 +337,14 @@ class QuestionPageState extends State<QuestionPage>
                           child: Container(
                             height: 50.0,
                             color: gender == using.identifier
-                                ? Colors.orangeAccent.withAlpha(100)
+                                ? c.coral.withAlpha(100)
                                 : Colors.white,
                             child: Column(
                               children: <Widget>[
                                 Row(
                                   children: <Widget>[
                                     Radio(
-                                        activeColor: Colors.orangeAccent,
+                                        activeColor: c.coral,
                                         value: using.identifier,
                                         groupValue: gender,
                                         onChanged: (String value) {
@@ -410,14 +408,14 @@ class QuestionPageState extends State<QuestionPage>
                           child: Container(
                             height: 50.0,
                             color: exerTimes == using.identifier
-                                ? Colors.orangeAccent.withAlpha(100)
+                                ? c.coral.withAlpha(100)
                                 : Colors.white,
                             child: Column(
                               children: <Widget>[
                                 Row(
                                   children: <Widget>[
                                     Radio(
-                                        activeColor: Colors.orangeAccent,
+                                        activeColor: c.coral,
                                         value: using.identifier,
                                         groupValue: exerTimes,
                                         onChanged: (String value) {
@@ -480,14 +478,14 @@ class QuestionPageState extends State<QuestionPage>
                         child: Container(
                           height: 50.0,
                           color: goal == using.identifier
-                              ? Colors.orangeAccent.withAlpha(100)
+                              ? c.coral.withAlpha(100)
                               : Colors.white,
                           child: Column(
                             children: <Widget>[
                               Row(
                                 children: <Widget>[
                                   Radio(
-                                      activeColor: Colors.orangeAccent,
+                                      activeColor: c.coral,
                                       value: using.identifier,
                                       groupValue: goal,
                                       onChanged: (String value) {

@@ -19,8 +19,6 @@ import './src/detector_painters.dart';
 import 'package:flutter/foundation.dart';
 import 'package:camera/camera.dart';
 
-
-
 List<CameraDescription> cameras;
 
 Future<void> main() async {
@@ -32,7 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     initialRoute: '/setting',
+     initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (context) => RootPage(),
         '/login': (context) => LogInPage(),
@@ -174,7 +172,6 @@ class HomePageState extends State<HomePage> {
         DashboardPage(),
         CameraPage(widget.cameras),
         ProgressPage(),
-        SettingsPage(),
          PopupMenuButton<Detector>(
            onSelected: (Detector result) {
             _currentDetector = result;
