@@ -67,7 +67,7 @@ Widget profilePic (){
                   child: Text(
                     "Edit",
                     style: TextStyle(color: AppColours().offBlack),
-                    textScaleFactor: 1.25)
+                    textScaleFactor: 1.25), onPressed: () {},
                  
                 ),
               ],
