@@ -23,6 +23,8 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  final firstCamera = cameras.first;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/': (context) => RootPage(),
         '/login': (context) => LogInPage(),
-        '/home': (context) => HomePage(cameras),
+        '/home': (context) => HomePage(camera: firstCamera),
         '/questionnaire': (context) => QuestionPage(),
         '/results': (context) => CalorieCalc(),
         '/dashboard': (context) => DashboardPage(),
@@ -41,8 +43,12 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  var cameras;
-  HomePage(this.cameras);
+  final CameraDescription camera;
+  
+  const HomePage({
+    Key key,
+    @required this.camera,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -166,7 +172,7 @@ class HomePageState extends State<HomePage> {
             body: PageView(
       children: <Widget>[
         DashboardPage(),
-        CameraPage(widget.cameras),
+        CameraPage(camera: widget.camera),
         ProgressPage(),
          PopupMenuButton<Detector>(
            onSelected: (Detector result) {
