@@ -9,14 +9,10 @@ import 'package:flutter/material.dart';
 import './src/UI/questionPage.dart';
 import './src/UI/dashboardPage.dart';
 import './src/UI/cameraPage.dart';
-import './src/UI/settingsPage.dart';
 import './src/UI/progressPage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
-import 'utils.dart';
-import 'auth.dart';
 import './src/detector_painters.dart';
-import 'package:flutter/foundation.dart';
 import 'package:camera/camera.dart';
 
 List<CameraDescription> cameras;
@@ -30,7 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     initialRoute: '/',
+     initialRoute: '/home',
       routes: <String, WidgetBuilder>{
         '/': (context) => RootPage(),
         '/login': (context) => LogInPage(),

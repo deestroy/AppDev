@@ -31,7 +31,9 @@ class AuthService {
   Future <FirebaseUser> signIn() async {
     loading.add(true);
     //signs user into Google
-    GoogleSignInAccount googleUser = await googleSignIn.signIn();
+    GoogleSignInAccount googleUser = await googleSignIn.signIn().catchError((onError){
+      print ("Error $onError");
+    });
     GoogleSignInAuthentication googleAuth = await googleUser.authentication;
     
     final AuthCredential credential = GoogleAuthProvider.getCredential(

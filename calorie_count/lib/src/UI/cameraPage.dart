@@ -1,6 +1,7 @@
 import 'package:calorie_count/main.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CameraPage extends StatefulWidget {
   List<CameraDescription> cameras;
@@ -44,6 +45,5 @@ class CameraPageState extends State<CameraPage> {
         aspectRatio: controller.value.aspectRatio,
         child: new CameraPreview(controller),
         );
-
   }
 }
