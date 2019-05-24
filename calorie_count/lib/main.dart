@@ -9,14 +9,10 @@ import 'package:flutter/material.dart';
 import './src/UI/questionPage.dart';
 import './src/UI/dashboardPage.dart';
 import './src/UI/cameraPage.dart';
-import './src/UI/settingsPage.dart';
 import './src/UI/progressPage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
-import 'utils.dart';
-import 'auth.dart';
 import './src/detector_painters.dart';
-import 'package:flutter/foundation.dart';
 import 'package:camera/camera.dart';
 
 List<CameraDescription> cameras;
@@ -27,14 +23,16 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  final firstCamera = cameras.first;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     initialRoute: '/',
+     initialRoute: '/home',
       routes: <String, WidgetBuilder>{
         '/': (context) => RootPage(),
         '/login': (context) => LogInPage(),
-        '/home': (context) => HomePage(cameras),
+        '/home': (context) => HomePage(camera: firstCamera),
         '/questionnaire': (context) => QuestionPage(),
         '/results': (context) => CalorieCalc(),
         '/dashboard': (context) => DashboardPage(),
@@ -45,8 +43,12 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  var cameras;
-  HomePage(this.cameras);
+  final CameraDescription camera;
+  
+  const HomePage({
+    Key key,
+    @required this.camera,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -170,7 +172,7 @@ class HomePageState extends State<HomePage> {
             body: PageView(
       children: <Widget>[
         DashboardPage(),
-        CameraPage(widget.cameras),
+        CameraPage(camera: widget.camera),
         ProgressPage(),
          PopupMenuButton<Detector>(
            onSelected: (Detector result) {

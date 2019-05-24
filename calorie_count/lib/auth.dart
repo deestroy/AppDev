@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AuthService {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -31,7 +30,9 @@ class AuthService {
   Future <FirebaseUser> signIn() async {
     loading.add(true);
     //signs user into Google
-    GoogleSignInAccount googleUser = await googleSignIn.signIn();
+    GoogleSignInAccount googleUser = await googleSignIn.signIn().catchError((onError){
+      print ("Error $onError");
+    });
     GoogleSignInAuthentication googleAuth = await googleUser.authentication;
     
     final AuthCredential credential = GoogleAuthProvider.getCredential(
@@ -68,61 +69,6 @@ class AuthService {
     print("User signed out");
   }
 
-  //writes user's questionnaire answers to database
-  void writeAnswersDB (FirebaseUser user, QuestionAnswers ans) async {
-    
-    DocumentReference ref = _db.collection('questionnaire').document(user.uid);
-
-    return ref.setData({
-      'uid': user.uid,
-      'age': ans.getAge(),
-      'height': ans.getHeight(),
-      'weight': ans.getWeight(),
-      'activityLevel': ans.getActLvl(),
-      'goal': ans.getLoseGain(),
-      'gender': ans.getGender(),
-     // 'unit': 
-
-    }, merge: true);
-
-  }
-
 } //AuthService
 
 final AuthService authService = AuthService();
-
-class CrudMethods {
-  bool isLoggedIn() {
-    if (FirebaseAuth.instance.currentUser() != null) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // Future <void> addData(QuestionAnswers ans) async {
-  //   print (Firestore.instance);
-  //   Map answers = {
-  //    // 'uid': FirebaseAuth.instance.currentUser().uid,
-  //     'age': ans.getAge(),
-  //     'height': ans.getHeight(),
-  //     'weight': ans.getWeight(),
-  //     'activityLevel': ans.getActLvl(),
-  //     'goal': ans.getLoseGain(),
-  //     'gender': ans.getGender(),
-  //   };
-
-  //   if (isLoggedIn()) {
-  //     Firestore.instance.collection('questionnaire').add(answers).catchError((e) {
-  //       print (e);
-  //     });
-  //   }
-  // }
-}
-
-class QuestionnaireDB {
-  final Firestore _db = Firestore.instance;
-  
-
-
-}

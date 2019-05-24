@@ -1,6 +1,4 @@
-
 import 'package:calorie_count/main.dart';
-import 'package:calorie_count/src/UI/questionPage.dart';
 import 'package:flutter/material.dart';
 
 import 'loginPage.dart';
@@ -17,7 +15,7 @@ class RootPage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             //signed in
-            return new HomePage(this.cameras);
+            return new HomePage(camera: this.cameras);
           } else {
             // signed out
            return new LogInPage();
