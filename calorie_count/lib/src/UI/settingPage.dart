@@ -1,5 +1,6 @@
 import 'package:calorie_count/auth.dart';
 import 'package:calorie_count/main.dart';
+import 'package:calorie_count/src/UI/rootPage.dart';
 import 'package:flutter/material.dart';
 
 class SettingPage extends StatelessWidget{
@@ -29,7 +30,8 @@ class SettingPage extends StatelessWidget{
                 ),
                 Expanded(
                   child: Text(
-                    "Username",
+                    //"hi",
+                    AuthService().getName(),
                     style:
                         TextStyle(color: AppColours().offBlack, fontSize: 18.0),
                     textAlign: TextAlign.start,
@@ -57,6 +59,7 @@ class SettingPage extends StatelessWidget{
                     color: AppColours().offBlack,
                     onPressed: () {
                       authService.signOut();
+                      Navigator.push(context, new MaterialPageRoute(builder: (context) =>new RootPage()));
                     },
                     child: Text(
                       "Logout",

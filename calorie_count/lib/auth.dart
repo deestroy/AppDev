@@ -8,7 +8,7 @@ class AuthService {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final Firestore _db = Firestore.instance;
-  String uid;
+  String uid, dp, name = "";
 
   Observable<FirebaseUser> user; //Firebase user
   Observable <Map<String, dynamic>> profile; //user data in Firestore
@@ -44,6 +44,8 @@ class AuthService {
     //signs user into Firebase
     final FirebaseUser user = await auth.signInWithCredential(credential);
     uid = user.uid;
+    dp = user.photoUrl;
+    name = user.displayName;
 
     updateUserData(user);
     print(user.displayName + "signed in");
@@ -52,7 +54,7 @@ class AuthService {
     return user;
   }
 
-  void updateUserData (FirebaseUser user) async {
+  void updateUserData(FirebaseUser user) async {
     DocumentReference ref = _db.collection('users').document(user.uid);
 
     return ref.setData({
@@ -71,10 +73,17 @@ class AuthService {
     print("User signed out");
   }
 
-  getUid () {
+  getUid() {
     return uid;
   }
 
+  getDP() {
+    return dp;
+  }
+
+  getName() {
+    return name;
+  }
 } //AuthService
 
 final AuthService authService = AuthService();

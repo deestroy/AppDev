@@ -1,4 +1,5 @@
 import 'package:calorie_count/main.dart';
+import 'package:calorie_count/src/UI/settingPage.dart';
 import 'package:calorie_count/src/foodData.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
@@ -42,9 +43,8 @@ class DashboardPage extends StatelessWidget {
                         shape: new CircleBorder(),
                         borderSide: BorderSide(color: Colors.black, width: 2.0),
                         highlightedBorderColor: Colors.grey,
-                        // child: user profile picture,
                         onPressed: () {
-                          Navigator.pushNamed(context, '/setting');
+                          Navigator.push(context, new MaterialPageRoute(builder: (context) =>new SettingPage()));
                         },
                       ),
                     )

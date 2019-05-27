@@ -37,6 +37,12 @@ class MyApp extends StatelessWidget {
         '/dashboard': (context) => DashboardPage(),
         '/setting': (context) => SettingPage(),
       },
+      onUnknownRoute: (RouteSettings setting) {
+        return new MaterialPageRoute(
+                builder: (context) => HomePage(camera: firstCamera)
+    );
+  }
+      
     );
   }//build
 }

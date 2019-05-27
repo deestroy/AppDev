@@ -78,10 +78,8 @@ class CameraPageState extends State<CameraPage> {
               (await getTemporaryDirectory()).path,
               '${DateTime.now()}.png',
             );
-
             // Attempt to take a picture and log where it's been saved
             await _controller.takePicture(path);
-
             // If the picture was taken, display it on a new screen
             Navigator.push(
               context,
@@ -115,17 +113,36 @@ class DisplayPictureScreen extends StatelessWidget {
               children: <Widget>[
                 Image.file(File(imagePath)),
                 Positioned(
-                  
                   child: Padding(
                     padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: BackButton(
-                        color: AppColours().offBlack,
+                        color: Colors.black,
                       ),
                     ),
                   ),
-                )
+                ),
+                Positioned(
+                  right: 5.0,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: IconButton(
+                        icon: Icon(Icons.done, size: 30.0),
+                        color: Colors.black,
+                        onPressed: () {
+                            print ("pressed");
+                            // update food and go back to dashboard,
+                          } 
+                      ),
+                    ),
+                  ),
+                ),
+
+
+
               ],
             )
           ],
