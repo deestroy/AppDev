@@ -63,12 +63,12 @@ class HomePageState extends State<HomePage> {
 
   Future<void> _getAndScanImage() async {
      setState(() {
-      _imageFile = null;
+      _imageFile = ImageSource.camera as File;
       _imageSize = null;
       
    });
      final File imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
-     if (imageFile == null) {
+     if (imageFile != null) {
        _getImageSize(imageFile);
        _scanImage(imageFile);
      }
