@@ -68,7 +68,7 @@ class HomePageState extends State<HomePage> {
       
    });
      final File imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
-     if (imageFile != null) {
+     if (imageFile == null) {
        _getImageSize(imageFile);
        _scanImage(imageFile);
      }
