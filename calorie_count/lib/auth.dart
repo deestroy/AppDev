@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rxdart/rxdart.dart';
@@ -9,6 +8,7 @@ class AuthService {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final Firestore _db = Firestore.instance;
+  String uid;
 
   Observable<FirebaseUser> user; //Firebase user
   Observable <Map<String, dynamic>> profile; //user data in Firestore
@@ -24,6 +24,7 @@ class AuthService {
       } else {
         return Observable.just({});
       }
+      
     });
   }
   
@@ -42,6 +43,7 @@ class AuthService {
 
     //signs user into Firebase
     final FirebaseUser user = await auth.signInWithCredential(credential);
+    uid = user.uid;
 
     updateUserData(user);
     print(user.displayName + "signed in");
@@ -67,6 +69,10 @@ class AuthService {
     auth.signOut();
     googleSignIn.signOut();
     print("User signed out");
+  }
+
+  getUid () {
+    return uid;
   }
 
 } //AuthService

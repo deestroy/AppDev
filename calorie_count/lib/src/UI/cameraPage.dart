@@ -5,6 +5,8 @@ import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' show join;
 
+import '../../main.dart';
+
 class CameraPage extends StatefulWidget {
   final CameraDescription camera;
 
@@ -32,7 +34,7 @@ class CameraPageState extends State<CameraPage> {
       ResolutionPreset.medium,
     );
 
-    // Next, you need to initialize the controller. This returns a Future
+    //Initialize the controller. This returns a Future
     _initializeControllerFuture = _controller.initialize();
   }
 
@@ -59,7 +61,7 @@ class CameraPageState extends State<CameraPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-      //  child: Icon(Icons.camera_alt),
+        //  child: Icon(Icons.camera_alt),
         backgroundColor: Colors.white,
         onPressed: () async {
           // Take the Picture in a try / catch block. If anything goes wrong,
@@ -97,7 +99,6 @@ class CameraPageState extends State<CameraPage> {
   }
 }
 
-
 // A Widget that displays the picture taken by the user
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
@@ -107,10 +108,29 @@ class DisplayPictureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Display the Picture')),
-      // The image is stored as a file on the device. Use the `Image.file`
-      // constructor with the given path to display the image
-      body: Image.file(File(imagePath)),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Stack(
+              children: <Widget>[
+                Image.file(File(imagePath)),
+                Positioned(
+                  
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: BackButton(
+                        color: AppColours().offBlack,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 }
