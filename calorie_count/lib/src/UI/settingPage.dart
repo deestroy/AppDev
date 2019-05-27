@@ -4,10 +4,12 @@ import 'package:calorie_count/src/UI/rootPage.dart';
 import 'package:flutter/material.dart';
 
 class SettingPage extends StatelessWidget{
+  
+
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    
     return Scaffold(
       body: Container(
         child: Column(
@@ -30,7 +32,6 @@ class SettingPage extends StatelessWidget{
                 ),
                 Expanded(
                   child: Text(
-                    //"hi",
                     AuthService().getName(),
                     style:
                         TextStyle(color: AppColours().offBlack, fontSize: 18.0),

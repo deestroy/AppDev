@@ -5,7 +5,7 @@ import 'loginPage.dart';
 import 'package:calorie_count/auth.dart';
 
 class RootPage extends StatelessWidget {
-  var cameras;
+  final firstCamera = cameras.first;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class RootPage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             //signed in
-            return new HomePage(camera: this.cameras);
+            return new HomePage(camera: firstCamera);
           } else {
             // signed out
            return new LogInPage();

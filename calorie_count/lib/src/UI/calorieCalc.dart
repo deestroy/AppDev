@@ -1,5 +1,4 @@
 import 'package:calorie_count/main.dart';
-import 'package:calorie_count/src/UI/questionPage.dart';
 import 'package:flutter/material.dart';
 
 class CalorieCalc extends StatelessWidget {

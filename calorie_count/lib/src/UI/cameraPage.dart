@@ -60,18 +60,15 @@ class CameraPageState extends State<CameraPage> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      
+      //button to take picture
       floatingActionButton: FloatingActionButton(
-        //  child: Icon(Icons.camera_alt),
         backgroundColor: Colors.white,
         onPressed: () async {
-          // Take the Picture in a try / catch block. If anything goes wrong,
-          // catch the error.
           try {
             // Ensure the camera is initialized
             await _initializeControllerFuture;
-
-            // Construct the path where the image should be saved using the path
-            // package.
+            // Construct the path where the image should be saved using the path package
             final path = join(
               // In this example, store the picture in the temp directory. Find
               // the temp directory using the `path_provider` plugin.
