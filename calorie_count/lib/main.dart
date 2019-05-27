@@ -24,7 +24,6 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   final firstCamera = cameras.first;
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -171,8 +170,8 @@ class HomePageState extends State<HomePage> {
         home: new Scaffold(
             body: PageView(
       children: <Widget>[
-        DashboardPage(),
         CameraPage(camera: widget.camera),
+        DashboardPage(),
         ProgressPage(),
          PopupMenuButton<Detector>(
            onSelected: (Detector result) {
