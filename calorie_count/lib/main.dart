@@ -21,7 +21,6 @@ Future<void> main() async {
   cameras = await availableCameras();
   runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
   final firstCamera = cameras.first;
   @override
@@ -31,7 +30,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/': (context) => RootPage(),
         '/login': (context) => LogInPage(),
-        '/home': (context) => HomePage(camera: firstCamera),
+        '/home': (context) => HomePage(camera: firstCamera, path: ""),
         '/questionnaire': (context) => QuestionPage(),
         '/results': (context) => CalorieCalc(),
         '/dashboard': (context) => DashboardPage(),
@@ -49,10 +48,12 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatefulWidget {
   final CameraDescription camera;
-  
+  final path;
+
   const HomePage({
     Key key,
     @required this.camera,
+    @required this.path,
   }) : super(key: key);
 
   @override
@@ -170,7 +171,6 @@ class HomePageState extends State<HomePage> {
      );
    }
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -180,7 +180,7 @@ class HomePageState extends State<HomePage> {
         CameraPage(camera: widget.camera),
         DashboardPage(),
         ProgressPage(),
-         PopupMenuButton<Detector>(
+        PopupMenuButton<Detector>(
            onSelected: (Detector result) {
             _currentDetector = result;
             if (_imageFile != null) _scanImage(_imageFile);

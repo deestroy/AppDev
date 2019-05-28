@@ -77,6 +77,7 @@ class CameraPageState extends State<CameraPage> {
             );
             // Attempt to take a picture and log where it's been saved
             await _controller.takePicture(path);
+            
             // If the picture was taken, display it on a new screen
             Navigator.push(
               context,
