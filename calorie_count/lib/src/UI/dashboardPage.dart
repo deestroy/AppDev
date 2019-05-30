@@ -1,3 +1,4 @@
+import 'package:calorie_count/auth.dart';
 import 'package:calorie_count/main.dart';
 import 'package:calorie_count/src/UI/settingPage.dart';
 import 'package:calorie_count/src/foodData.dart';
@@ -44,7 +45,7 @@ class DashboardPage extends StatelessWidget {
                         borderSide: BorderSide(color: Colors.black, width: 2.0),
                         highlightedBorderColor: Colors.grey,
                         onPressed: () {
-                          Navigator.push(context, new MaterialPageRoute(builder: (context) =>new SettingPage()));
+                          Navigator.push(context, new MaterialPageRoute(builder: (context) =>new SettingPage(name: AuthService().getName())));
                         },
                       ),
                     )
@@ -143,7 +144,6 @@ class DashboardPage extends StatelessWidget {
             ),
             Padding(padding: EdgeInsets.only(bottom: 12.0)),
 
-            /////////////////
             _header("Breakfast", screenWidth),
             Row(
               children: <Widget>[

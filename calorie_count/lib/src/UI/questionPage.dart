@@ -102,7 +102,6 @@ class QuestionPageState extends State<QuestionPage>
                       //make an object containing all the answers to pass through
                        QuestionAnswers calorieGoal =  new QuestionAnswers(
                           age, height, weight, gender, activityLevel, goal);
-                      
                       Navigator.push(context, MaterialPageRoute(builder: (context) => new CalorieCalc(ans: calorieGoal, units: unit)));
                     }
                   },

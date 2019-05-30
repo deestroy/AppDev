@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:calorie_count/auth.dart';
 import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:calorie_count/src/UI/loginPage.dart';
 import 'package:calorie_count/src/UI/rootPage.dart';
@@ -21,39 +22,39 @@ Future<void> main() async {
   cameras = await availableCameras();
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   final firstCamera = cameras.first;
+  final String uid = AuthService().getUid();
+  final String name = AuthService().getName();
+  final String dp = AuthService().getDP();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     initialRoute: '/home',
-      routes: <String, WidgetBuilder>{
-        '/': (context) => RootPage(),
-        '/login': (context) => LogInPage(),
-        '/home': (context) => HomePage(camera: firstCamera, path: ""),
-        '/questionnaire': (context) => QuestionPage(),
-        '/results': (context) => CalorieCalc(),
-        '/dashboard': (context) => DashboardPage(),
-        '/setting': (context) => SettingPage(),
-      },
-      onUnknownRoute: (RouteSettings setting) {
-        return new MaterialPageRoute(
-                builder: (context) => HomePage(camera: firstCamera)
-    );
-  }
-      
-    );
-  }//build
+        initialRoute: '/home',
+        routes: <String, WidgetBuilder>{
+          '/': (context) => RootPage(),
+          '/login': (context) => LogInPage(),
+          '/home': (context) => HomePage(camera: firstCamera),
+          '/questionnaire': (context) => QuestionPage(),
+          '/results': (context) => CalorieCalc(),
+          '/dashboard': (context) => DashboardPage(),
+          '/setting': (context) => SettingPage(name: name, dp: dp),
+        },
+        onUnknownRoute: (RouteSettings setting) {
+          return new MaterialPageRoute(
+              builder: (context) => HomePage(camera: firstCamera));
+        });
+  } //build
 }
 
 class HomePage extends StatefulWidget {
   final CameraDescription camera;
-  final path;
 
   const HomePage({
     Key key,
     @required this.camera,
-    @required this.path,
   }) : super(key: key);
 
   @override
@@ -63,113 +64,113 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  File _imageFile;
-  Size _imageSize;
-  dynamic _scanResults;
-  Detector _currentDetector = Detector.label;
+  // File _imageFile;
+  // Size _imageSize;
+  // dynamic _scanResults;
+  // Detector _currentDetector = Detector.label;
 
-  Future<void> _getAndScanImage() async {
-     setState(() {
-      _imageFile = ImageSource.camera as File;
-      _imageSize = null;
-      
-   });
-     final File imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
-     if (imageFile != null) {
-       _getImageSize(imageFile);
-       _scanImage(imageFile);
-     }
+  // Future<void> _getAndScanImage() async {
+  //    setState(() {
+  //     _imageFile = ImageSource.camera as File;
+  //     _imageSize = null;
 
-     setState(() {
-       _imageFile = imageFile;
-     });
-   }
+  //  });
+  //    final File imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
+  //    if (imageFile != null) {
+  //      _getImageSize(imageFile);
+  //      _scanImage(imageFile);
+  //    }
 
-   Future<void> _getImageSize(File imageFile) async {
-     final Completer<Size> completer = Completer<Size>();
+  //    setState(() {
+  //      _imageFile = imageFile;
+  //    });
+  //  }
 
-     final Image image = Image.file(imageFile);
-     image.image.resolve(const ImageConfiguration()).addListener(
-       (ImageInfo info, bool _) {
-         completer.complete(Size(
-           info.image.width.toDouble(),
-           info.image.height.toDouble(),
-         ));
-       },
-     );
-     final Size imageSize = await completer.future;
-     setState(() {
-       _imageSize = imageSize;
-     });
-   }
+  //  Future<void> _getImageSize(File imageFile) async {
+  //    final Completer<Size> completer = Completer<Size>();
 
-   Future<void> _scanImage(File imageFile) async {
-     setState(() {
-       _scanResults = null;
-     });
+  //    final Image image = Image.file(imageFile);
+  //    image.image.resolve(const ImageConfiguration()).addListener(
+  //      (ImageInfo info, bool _) {
+  //        completer.complete(Size(
+  //          info.image.width.toDouble(),
+  //          info.image.height.toDouble(),
+  //        ));
+  //      },
+  //    );
+  //    final Size imageSize = await completer.future;
+  //    setState(() {
+  //      _imageSize = imageSize;
+  //    });
+  //  }
 
-     final FirebaseVisionImage visionImage =
-         FirebaseVisionImage.fromFile(imageFile);
-    
-     dynamic results;
-     switch (_currentDetector) {
-        case Detector.label:
-         final ImageLabeler labeler = FirebaseVision.instance.imageLabeler();
-         results = await labeler.processImage(visionImage);
-         break;
-       case Detector.cloudLabel:
-         final ImageLabeler labeler =
-             FirebaseVision.instance.cloudImageLabeler();
-         results = await labeler.processImage(visionImage);
-         break;
-       default:
-         return;
-   }
+  //  Future<void> _scanImage(File imageFile) async {
+  //    setState(() {
+  //      _scanResults = null;
+  //    });
 
-   setState(() {
-       _scanResults = results;
-     });
-   }
-   CustomPaint _buildResults(Size imageSize, dynamic results) {
-     CustomPainter painter;
+  //    final FirebaseVisionImage visionImage =
+  //        FirebaseVisionImage.fromFile(imageFile);
 
-     switch (_currentDetector) {
-        case Detector.label:
-           painter = LabelDetectorPainter(_imageSize, results);
-           break;
-         case Detector.cloudLabel:
-           painter = LabelDetectorPainter(_imageSize, results);
-           break;
-         default:
-           break;
-     }
-     return CustomPaint(
-       painter: painter,
-     );
-   }
+  //    dynamic results;
+  //    switch (_currentDetector) {
+  //       case Detector.label:
+  //        final ImageLabeler labeler = FirebaseVision.instance.imageLabeler();
+  //        results = await labeler.processImage(visionImage);
+  //        break;
+  //      case Detector.cloudLabel:
+  //        final ImageLabeler labeler =
+  //            FirebaseVision.instance.cloudImageLabeler();
+  //        results = await labeler.processImage(visionImage);
+  //        break;
+  //      default:
+  //        return;
+  //  }
 
-   Widget _buildImage() {
-     return Container(
-       constraints: const BoxConstraints.expand(),
-       decoration: BoxDecoration(
-         image: DecorationImage(
-           image: Image.file(_imageFile).image,
-           fit: BoxFit.fill,
-         ),
-       ),
-       child: _imageSize == null || _scanResults == null
-           ? const Center(
-               child: Text(
-                 'Scanning...',
-                 style: TextStyle(
-                   color: Colors.green,
-                   fontSize: 30.0,
-                 ),
-               ),
-             )
-           : _buildResults(_imageSize, _scanResults),
-     );
-   }
+  //  setState(() {
+  //      _scanResults = results;
+  //    });
+  //  }
+  //  CustomPaint _buildResults(Size imageSize, dynamic results) {
+  //    CustomPainter painter;
+
+  //    switch (_currentDetector) {
+  //       case Detector.label:
+  //          painter = LabelDetectorPainter(_imageSize, results);
+  //          break;
+  //        case Detector.cloudLabel:
+  //          painter = LabelDetectorPainter(_imageSize, results);
+  //          break;
+  //        default:
+  //          break;
+  //    }
+  //    return CustomPaint(
+  //      painter: painter,
+  //    );
+  //  }
+
+  //  Widget _buildImage() {
+  //    return Container(
+  //      constraints: const BoxConstraints.expand(),
+  //      decoration: BoxDecoration(
+  //        image: DecorationImage(
+  //          image: Image.file(_imageFile).image,
+  //          fit: BoxFit.fill,
+  //        ),
+  //      ),
+  //      child: _imageSize == null || _scanResults == null
+  //          ? const Center(
+  //              child: Text(
+  //                'Scanning...',
+  //                style: TextStyle(
+  //                  color: Colors.green,
+  //                  fontSize: 30.0,
+  //                ),
+  //              ),
+  //            )
+  //          : _buildResults(_imageSize, _scanResults),
+  //    );
+  //  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,30 +181,28 @@ class HomePageState extends State<HomePage> {
         CameraPage(camera: widget.camera),
         DashboardPage(),
         ProgressPage(),
-        PopupMenuButton<Detector>(
-           onSelected: (Detector result) {
-            _currentDetector = result;
-            if (_imageFile != null) _scanImage(_imageFile);
-           },
-           itemBuilder: (BuildContext context) => <PopupMenuEntry<Detector>>[
-               const PopupMenuItem<Detector>(
-                   child: Text('Detect Cloud Label'),
-                   value: Detector.cloudLabel,
-               ),
-               const PopupMenuItem<Detector>(
-                   child: Text('Detect Text'),
-                   value: Detector.label,
-             ),
-           ],
-         ),
+        // PopupMenuButton<Detector>(
+        //    onSelected: (Detector result) {
+        //     _currentDetector = result;
+        //     if (_imageFile != null) _scanImage(_imageFile);
+        //    },
+        //    itemBuilder: (BuildContext context) => <PopupMenuEntry<Detector>>[
+        //        const PopupMenuItem<Detector>(
+        //            child: Text('Detect Cloud Label'),
+        //            value: Detector.cloudLabel,
+        //        ),
+        //        const PopupMenuItem<Detector>(
+        //            child: Text('Detect Text'),
+        //            value: Detector.label,
+        //      ),
+        //    ],
+        //  ),
       ],
     )));
   }
 }
 
-
 class AppColours {
   final offBlack = const Color(0xFF4C4B4B);
   final coral = const Color(0xFFEA7773);
 }
-

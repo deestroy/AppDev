@@ -1,11 +1,14 @@
 import 'package:calorie_count/auth.dart';
 import 'package:calorie_count/main.dart';
-import 'package:calorie_count/src/UI/rootPage.dart';
 import 'package:flutter/material.dart';
 
 class SettingPage extends StatelessWidget{
-  
+  final String name, dp;
 
+  SettingPage({
+    Key key,
+    this.name, this.dp
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +62,7 @@ class SettingPage extends StatelessWidget{
                   child: FlatButton(
                     color: AppColours().offBlack,
                     onPressed: () {
-                      authService.signOut();
-                      Navigator.push(context, new MaterialPageRoute(builder: (context) =>new RootPage()));
+                      AuthService().signOut();
                     },
                     child: Text(
                       "Logout",
@@ -89,8 +91,7 @@ class SettingPage extends StatelessWidget{
                 shape: BoxShape.circle,
                 image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: NetworkImage("https://i.imgur.com/BoN9kdC.png")))),
-       
+                    image: NetworkImage("https://lh6.googleusercontent.com/-ZEWybEXg0aE/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3re7upo8oakPR3NAesXp7ipyG4mWlw/s96-c/photo.jpg")))),
       ],
     );
   }
