@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 class DashboardPage extends StatelessWidget {
+
+
+
   @override
   Widget build(BuildContext context) {
     final ui.Size logicalSize = MediaQuery.of(context).size;
@@ -45,7 +48,7 @@ class DashboardPage extends StatelessWidget {
                         borderSide: BorderSide(color: Colors.black, width: 2.0),
                         highlightedBorderColor: Colors.grey,
                         onPressed: () {
-                          Navigator.push(context, new MaterialPageRoute(builder: (context) =>new SettingPage(name: AuthService().getName())));
+                          Navigator.push(context, new MaterialPageRoute(builder: (context) => SettingPage()));
                         },
                       ),
                     )
