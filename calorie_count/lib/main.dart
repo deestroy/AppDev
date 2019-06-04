@@ -11,9 +11,9 @@ import './src/UI/questionPage.dart';
 import './src/UI/dashboardPage.dart';
 import './src/UI/cameraPage.dart';
 import './src/UI/progressPage.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_ml_vision/firebase_ml_vision.dart';
-import './src/detector_painters.dart';
+//import 'package:image_picker/image_picker.dart';
+//import 'package:firebase_ml_vision/firebase_ml_vision.dart';
+//import './src/detector_painters.dart';
 import 'package:camera/camera.dart';
 
 List<CameraDescription> cameras;
@@ -64,114 +64,6 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  // File _imageFile;
-  // Size _imageSize;
-  // dynamic _scanResults;
-  // Detector _currentDetector = Detector.label;
-
-  // Future<void> _getAndScanImage() async {
-  //    setState(() {
-  //     _imageFile = ImageSource.camera as File;
-  //     _imageSize = null;
-
-  //  });
-  //    final File imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
-  //    if (imageFile != null) {
-  //      _getImageSize(imageFile);
-  //      _scanImage(imageFile);
-  //    }
-
-  //    setState(() {
-  //      _imageFile = imageFile;
-  //    });
-  //  }
-
-  //  Future<void> _getImageSize(File imageFile) async {
-  //    final Completer<Size> completer = Completer<Size>();
-
-  //    final Image image = Image.file(imageFile);
-  //    image.image.resolve(const ImageConfiguration()).addListener(
-  //      (ImageInfo info, bool _) {
-  //        completer.complete(Size(
-  //          info.image.width.toDouble(),
-  //          info.image.height.toDouble(),
-  //        ));
-  //      },
-  //    );
-  //    final Size imageSize = await completer.future;
-  //    setState(() {
-  //      _imageSize = imageSize;
-  //    });
-  //  }
-
-  //  Future<void> _scanImage(File imageFile) async {
-  //    setState(() {
-  //      _scanResults = null;
-  //    });
-
-  //    final FirebaseVisionImage visionImage =
-  //        FirebaseVisionImage.fromFile(imageFile);
-
-  //    dynamic results;
-  //    switch (_currentDetector) {
-  //       case Detector.label:
-  //        final ImageLabeler labeler = FirebaseVision.instance.imageLabeler();
-  //        results = await labeler.processImage(visionImage);
-  //        break;
-  //      case Detector.cloudLabel:
-  //        final ImageLabeler labeler =
-  //            FirebaseVision.instance.cloudImageLabeler();
-  //        results = await labeler.processImage(visionImage);
-  //        break;
-  //      default:
-  //        return;
-  //  }
-
-  //  setState(() {
-  //      _scanResults = results;
-  //    });
-  //  }
-  //  CustomPaint _buildResults(Size imageSize, dynamic results) {
-  //    CustomPainter painter;
-
-  //    switch (_currentDetector) {
-  //       case Detector.label:
-  //          painter = LabelDetectorPainter(_imageSize, results);
-  //          break;
-  //        case Detector.cloudLabel:
-  //          painter = LabelDetectorPainter(_imageSize, results);
-  //          break;
-  //        default:
-  //          break;
-  //    }
-  //    return CustomPaint(
-  //      painter: painter,
-  //    );
-  //  }
-
-  //  Widget _buildImage() {
-  //    return Container(
-  //      constraints: const BoxConstraints.expand(),
-  //      decoration: BoxDecoration(
-  //        image: DecorationImage(
-  //          image: Image.file(_imageFile).image,
-  //          fit: BoxFit.fill,
-  //        ),
-  //      ),
-  //      child: _imageSize == null || _scanResults == null
-  //          ? const Center(
-  //              child: Text(
-  //                'Scanning...',
-  //                style: TextStyle(
-  //                  color: Colors.green,
-  //                  fontSize: 30.0,
-  //                ),
-  //              ),
-  //            )
-  //          : _buildResults(_imageSize, _scanResults),
-  //    );
-  //  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -181,22 +73,6 @@ class HomePageState extends State<HomePage> {
         CameraPage(camera: widget.camera),
         DashboardPage(),
         ProgressPage(),
-        // PopupMenuButton<Detector>(
-        //    onSelected: (Detector result) {
-        //     _currentDetector = result;
-        //     if (_imageFile != null) _scanImage(_imageFile);
-        //    },
-        //    itemBuilder: (BuildContext context) => <PopupMenuEntry<Detector>>[
-        //        const PopupMenuItem<Detector>(
-        //            child: Text('Detect Cloud Label'),
-        //            value: Detector.cloudLabel,
-        //        ),
-        //        const PopupMenuItem<Detector>(
-        //            child: Text('Detect Text'),
-        //            value: Detector.label,
-        //      ),
-        //    ],
-        //  ),
       ],
     )));
   }
