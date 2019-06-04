@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class Database {
   final Firestore _db = Firestore.instance;
-  String uid = AuthService().getUid();
+  
   
   void writeData (String uid, gender, goal, actLvl, double age, height, weight) {
     Firestore.instance.collection('questionnaire').document().setData({

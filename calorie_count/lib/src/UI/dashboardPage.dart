@@ -1,14 +1,11 @@
-import 'package:calorie_count/auth.dart';
 import 'package:calorie_count/main.dart';
 import 'package:calorie_count/src/UI/settingPage.dart';
 import 'package:calorie_count/src/foodData.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 class DashboardPage extends StatelessWidget {
-
-
-
   @override
   Widget build(BuildContext context) {
     final ui.Size logicalSize = MediaQuery.of(context).size;
@@ -37,21 +34,45 @@ class DashboardPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Positioned(
-                      //Settings button
-                      right: -7.0,
-                      top: 3.0,
-                      bottom: 3.0,
-                      child: new OutlineButton(
-                        child: Text("S"),
-                        shape: new CircleBorder(),
-                        borderSide: BorderSide(color: Colors.black, width: 2.0),
-                        highlightedBorderColor: Colors.grey,
-                        onPressed: () {
-                          Navigator.push(context, new MaterialPageRoute(builder: (context) => SettingPage()));
-                        },
-                      ),
-                    )
+                    FutureBuilder(
+                        future: FirebaseAuth.instance.currentUser(),
+                        builder:
+                            (context, AsyncSnapshot<FirebaseUser> snapshot) {
+                          if (snapshot.hasData) {
+                            return Positioned(
+                              //Settings button
+                              right: -7.0,
+                              top: 3.0,
+                              bottom: 3.0,
+                              child: new OutlineButton(
+                                child: Container(
+                                  width: 40.0,
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image:
+                                          NetworkImage(snapshot.data.photoUrl),
+                                    ),
+                                  ),
+                                ),
+                                shape: new CircleBorder(),
+                                borderSide:
+                                    BorderSide(color: Colors.black, width: 2.0),
+                                highlightedBorderColor: Colors.grey,
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) => SettingPage()));
+                                },
+                              ),
+                            );
+                          } else {
+                            return null;
+                          }
+                        }),
                   ],
                 ),
               ],
@@ -146,7 +167,6 @@ class DashboardPage extends StatelessWidget {
               ],
             ),
             Padding(padding: EdgeInsets.only(bottom: 12.0)),
-
             _header("Breakfast", screenWidth),
             Row(
               children: <Widget>[

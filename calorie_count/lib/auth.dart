@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,19 +9,15 @@ class AuthService {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final Firestore _db = Firestore.instance;
-  String uid, dp, name = "hi";
 
   Observable<FirebaseUser> user; //Firebase user
   Observable<Map<String, dynamic>> profile; //user data in Firestore
   PublishSubject loading = PublishSubject();
-  Observable<bool> signedIn;
-
 
   AuthService() {
     //define user observable. Changes when user signs in and out
     user = Observable(auth.onAuthStateChanged); 
     
-
     profile = user.switchMap((FirebaseUser u) {
       if (u != null) {
         return _db
@@ -69,10 +66,6 @@ class AuthService {
 
   // }
 
-    setName(name);
-    setDP(dp);
-    setUID(uid);
-
     loading.add(false);
     return user;
   }
@@ -95,41 +88,42 @@ class AuthService {
     print("User signed out");
   }
 
-  setName(String n) {
-    name = n;
-    print("Username set to $n");
-  }
-
-  setUID(String u) {
-    uid = u;
-    print("UID is: $uid");
-  }
-
-  setDP(String d) {
-    dp = d;
-    print("Photo URL: $dp");
-  }
-
-  getUid() {
-    print('uid is $uid');
-    return uid;
-  }
-
-  getDP() {
-    return dp;
-  }
-
-  getName() {
-    return name;
-  }
 } //AuthService
 
 final AuthService authService = AuthService();
 
-class UserDetails {
-  final String displayName;
-  final String photoURL;
-  final String uid;
+class UserDetail extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return UserDetailState();
+  }
+}
 
-  UserDetails(this.displayName, this.photoURL, this.uid);
+class UserDetailState extends State<UserDetail> {
+  String username;
+  String displayPicture;
+  String uid;
+
+  Future<FirebaseUser> fetchUserDetails() async {
+    var user = await FirebaseAuth.instance.currentUser();
+    return user;
+  }
+
+   receiveData() async {
+    FirebaseUser u = await fetchUserDetails();
+    setState(() {
+      this.username = u.displayName;
+      this.displayPicture = u.photoUrl;
+      this.uid = u.uid;
+    });
+    print("Received user's details");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    fetchUserDetails();
+    receiveData();
+    return null;
+  }
+  
 }
