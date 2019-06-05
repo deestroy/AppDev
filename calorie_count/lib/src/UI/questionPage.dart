@@ -7,20 +7,15 @@ import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
 
 class QuestionPage extends StatefulWidget {
-  
-
-
   @override
-  State<StatefulWidget> createState() {
-    return QuestionPageState();
-  }
+  State<StatefulWidget> createState() => QuestionPageState();
 }
 
-TextEditingController ageController = new TextEditingController();
-TextEditingController heightController = new TextEditingController();
-TextEditingController weightController = new TextEditingController();
-
 class QuestionPageState extends State<QuestionPage> {
+  TextEditingController ageController = new TextEditingController();
+  TextEditingController heightController = new TextEditingController();
+  TextEditingController weightController = new TextEditingController();
+
   double age, height, weight;
   int currentIndex = 0;
   String exerTimes, goal, gender, activityLevel, loseGain, unit;
@@ -28,7 +23,7 @@ class QuestionPageState extends State<QuestionPage> {
   final formKey = GlobalKey<FormState>();
   AppColours c = new AppColours();
   bool emptyText = true;
-  
+
   List questions = [
     "How old are you?",
     "How tall are you in ?",
@@ -41,7 +36,7 @@ class QuestionPageState extends State<QuestionPage> {
   List<ExerQ> exerQuestion = [
     ExerQ('noX', 'Sedentary: Little to no exercise'),
     ExerQ('lightX', 'Lightly Active: Exercise 1-3 days/week'),
-    ExerQ('moderateX', 'Active: Moderate exercise 3-5 days/week'),
+    ExerQ('moderateX', 'Moderately Active: Exercise 3-5 days/week'),
     ExerQ('activeX', 'Active: Heavy exercise 6-7 days'),
     ExerQ("extremeX", "Very Active: Non-stop training")
   ];
@@ -60,7 +55,7 @@ class QuestionPageState extends State<QuestionPage> {
 
   List<GenderQ> genderQuestion = [GenderQ("M", "Male"), GenderQ("F", "Female")];
 
-@override
+  @override
   void dispose() {
     ageController.dispose();
     heightController.dispose();
@@ -92,26 +87,29 @@ class QuestionPageState extends State<QuestionPage> {
                 height: 50.0,
                 child: GestureDetector(
                   onTap: () {
-                    if (_valid  && currentIndex < 7) { //only let user continue if they answered the question
+                    if (_valid && currentIndex < 7) {
+                      //only let user continue if they answered the question
                       setState(() {
                         currentIndex += 1;
                         _valid = false;
                       });
                     }
-
                     //When questionnaire is finished, calculate user's calorie intake
                     if (currentIndex == 7) {
                       //make an object containing all the answers to pass through
-                       QuestionAnswers calorieGoal =  new QuestionAnswers(
+                      QuestionAnswers calorieGoal = new QuestionAnswers(
                           age, height, weight, gender, activityLevel, goal);
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => new CalorieCalc(ans: calorieGoal, units: unit)));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => new CalorieCalc(
+                                  ans: calorieGoal, units: unit)));
                     }
                   },
                   child: Center(
                       child: Text(
                     currentIndex < 5 ? 'Continue' : 'Finish',
-                    style:
-                        TextStyle(fontSize: 20.0, color: c.coral),
+                    style: TextStyle(fontSize: 20.0, color: c.coral),
                   )),
                 ),
               ),
@@ -149,7 +147,6 @@ class QuestionPageState extends State<QuestionPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            // Padding(padding: EdgeInsets.only(top: 16.0),),
             Text(
               "Insert Logo",
               style: TextStyle(fontSize: 30.0),
@@ -158,9 +155,7 @@ class QuestionPageState extends State<QuestionPage> {
             Text(
               'Calorie Intake Calculator',
               style: TextStyle(
-                  color: c.coral,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24.0),
+                  color: c.coral, fontWeight: FontWeight.bold, fontSize: 24.0),
               textAlign: TextAlign.left,
             ),
             Padding(padding: EdgeInsets.only(bottom: 16.0)),
@@ -274,16 +269,13 @@ class QuestionPageState extends State<QuestionPage> {
       if (q == questions[0]) {
         setState(() {
           age = double.parse(a);
-          print("Age is $age");
           _valid = true; //user answered so they can now continue to the next Q
         });
       } else if (q == questions[1]) {
         height = double.parse(a);
-        print("Height is $height");
         _valid = true; //user answered so they can now continue to the next Q
       } else if (q == questions[2]) {
         weight = double.parse(a);
-        print("Weight is $weight");
         _valid = true; //user answered so they can now continue to the next Q
       }
     }
@@ -332,7 +324,6 @@ class QuestionPageState extends State<QuestionPage> {
                           onTapUp: (detail) {
                             setState(() {
                               gender = using.identifier;
-                              print(gender);
                               _valid = true;
                             });
                           },
@@ -352,7 +343,6 @@ class QuestionPageState extends State<QuestionPage> {
                                         onChanged: (String value) {
                                           setState(() {
                                             gender = value;
-                                            print("changed");
                                           });
                                         }),
                                     Text(using.displayContent)
@@ -403,8 +393,8 @@ class QuestionPageState extends State<QuestionPage> {
                             setState(() {
                               exerTimes = using.identifier;
                               activityLevel = using.identifier;
-                              print(exerTimes);
-                              _valid = true; //user answered so they can now continue to the next Q
+                              _valid =
+                                  true; //user answered so they can now continue to the next Q
                             });
                           },
                           child: Container(
@@ -473,8 +463,8 @@ class QuestionPageState extends State<QuestionPage> {
                           setState(() {
                             goal = using.identifier;
                             loseGain = using.identifier;
-                            print(goal);
-                            _valid = true; //user answered so they can now continue to the next Q
+                            _valid =
+                                true; //user answered so they can now continue to the next Q
                           });
                         },
                         child: Container(

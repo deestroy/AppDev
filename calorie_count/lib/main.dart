@@ -36,8 +36,9 @@ class MyApp extends StatelessWidget {
           '/setting': (context) => SettingPage(),
         },
         onUnknownRoute: (RouteSettings setting) {
+          print("Unknown route");
           return new MaterialPageRoute(
-              builder: (context) => HomePage(camera: firstCamera));
+              builder: (context) => LogInPage());
         });
   } //build
 }

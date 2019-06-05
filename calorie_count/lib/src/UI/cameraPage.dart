@@ -93,8 +93,6 @@ class CameraPageState extends State<CameraPage> {
   }
 }
 
-
-
 // A Widget that displays the picture taken by the user
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;

@@ -1,25 +1,22 @@
 import 'package:calorie_count/auth.dart';
+import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Database {
-  final Firestore _db = Firestore.instance;
-  
-  
-  void writeData (String uid, gender, goal, actLvl, double age, height, weight) {
-    Firestore.instance.collection('questionnaire').document().setData({
-      'uid': uid,
-      'age': age,
-      'height': height,
-      'weight': weight,
-      'gender': gender,
-      'activityLvl': actLvl,
-      'goal': goal
+
+  Future<void> addData(QuestionAnswers q, int calories) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance.collection('questionnaire').document(user.uid).setData({
+      'age': q.getAge(),
+      'height': q.getHeight(),
+      'weight': q.getWeight(),
+      'gender': q.getGender(),
+      'activityLvl': q.getActLvlString(),
+      'goal': q.getLoseGainString(),
+      'calories': calories
     }, merge: true);
-
   }
-
-
 
 
 

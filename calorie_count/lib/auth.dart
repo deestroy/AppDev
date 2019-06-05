@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -58,14 +57,6 @@ class AuthService {
     updateUserData(user);
     print(user.displayName + " signed in");
 
-  //   UserDetails detail = new UserDetails(user.displayName, user.photoUrl, user.uid);
-
-  //   Future<String> fetchUserData() async {
-  //   var document = await Firestore.instance.collection('users').document(user.uid);
-  //   document.get() => then ()
-
-  // }
-
     loading.add(false);
     return user;
   }
@@ -92,38 +83,12 @@ class AuthService {
 
 final AuthService authService = AuthService();
 
-class UserDetail extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return UserDetailState();
-  }
-}
+// class User {
 
-class UserDetailState extends State<UserDetail> {
-  String username;
-  String displayPicture;
-  String uid;
+//   getUserUid() async {
+//     FirebaseUser u = await FirebaseAuth.instance.currentUser();
+//     print("User has been received");
+//     return u.uid;
+//   }
 
-  Future<FirebaseUser> fetchUserDetails() async {
-    var user = await FirebaseAuth.instance.currentUser();
-    return user;
-  }
-
-   receiveData() async {
-    FirebaseUser u = await fetchUserDetails();
-    setState(() {
-      this.username = u.displayName;
-      this.displayPicture = u.photoUrl;
-      this.uid = u.uid;
-    });
-    print("Received user's details");
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    fetchUserDetails();
-    receiveData();
-    return null;
-  }
-  
-}
+// }
