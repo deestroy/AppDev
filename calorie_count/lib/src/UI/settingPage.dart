@@ -62,7 +62,9 @@ class SettingPage extends StatelessWidget {
                     padding:
                         EdgeInsets.only(top: 50.0, bottom: 16.0, left: 25.0),
                     child: FlatButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/questionnaire');
+                      },
                       child: Text("Edit Goals",
                           style: TextStyle(
                               color: AppColours().offBlack, fontSize: 20.0)),

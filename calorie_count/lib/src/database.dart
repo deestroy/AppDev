@@ -1,7 +1,9 @@
-import 'package:calorie_count/auth.dart';
+import 'dart:io';
+
 import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class Database {
 
@@ -18,6 +20,10 @@ class Database {
     }, merge: true);
   }
 
-
-
+  // uploadPicture(String pictureName, File fileName) {
+  //   final StorageReference storageref = FirebaseStorage.instance.ref().child(pictureName);
+  //   final StorageUploadTask task = storageref.putFile(fileName);
+  // }
+    
+    
 }

@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:calorie_count/src/database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' show join;
-
 
 class CameraPage extends StatefulWidget {
   final CameraDescription camera;
@@ -24,6 +26,7 @@ class CameraPage extends StatefulWidget {
 class CameraPageState extends State<CameraPage> {
   CameraController _controller;
   Future<void> _initializeControllerFuture;
+  File pictureTaken;
 
   @override
   void initState() {
@@ -33,7 +36,7 @@ class CameraPageState extends State<CameraPage> {
       ResolutionPreset.medium,
     );
 
-    //Initialize the controller. This returns a Future
+    //Initialize the controller
     _initializeControllerFuture = _controller.initialize();
   }
 
@@ -43,9 +46,21 @@ class CameraPageState extends State<CameraPage> {
     super.dispose();
   }
 
+  Future getImage(String path) async {
+    var tempImage = File(path);
+
+    setState(() {
+      pictureTaken = tempImage;
+    });
+    
+    final StorageReference storageref = FirebaseStorage.instance.ref().child("myimage"); //CHANGE PICTURE NAME HERE
+    final StorageUploadTask task = storageref.putFile(pictureTaken);
+    }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //preview of camera
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
@@ -58,39 +73,38 @@ class CameraPageState extends State<CameraPage> {
           }
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       //button to take picture
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         onPressed: () async {
           try {
-            // Ensure the camera is initialized
             await _initializeControllerFuture;
             // Construct the path where the image should be saved using the path package
             final path = join(
-              // In this example, store the picture in the temp directory. Find
-              // the temp directory using the `path_provider` plugin.
               (await getTemporaryDirectory()).path,
               '${DateTime.now()}.png',
             );
             // Attempt to take a picture and log where it's been saved
             await _controller.takePicture(path);
             // If the picture was taken, display it on a new screen
-  
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(imagePath: path),
-              ),
-            );
-          } catch (e) {
-            // If an error occurs, log the error to the console.
-            print(e);
-          }
-        },
-      ),
-    );
-  }
+           getImage(path);
+            
+            
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DisplayPictureScreen(imagePath: path),
+                          ),
+                        );
+                      } catch (e) {
+                        // If an error occurs, log the error to the console.
+                        print(e);
+                      }
+                    },
+                  ),
+                );
+              }
 }
 
 // A Widget that displays the picture taken by the user

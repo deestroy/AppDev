@@ -41,7 +41,7 @@ class RootPageState extends State<RootPage> {
           stream: authService.user,
           builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
             if (snapshot.hasData) {
-              print("${snapshot.data.uid}");
+              print("${snapshot.data.displayName}");
               return Container(
                 child: FutureBuilder(
                   future: _checkQuestionnaireComplete(),

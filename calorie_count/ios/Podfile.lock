@@ -33,6 +33,9 @@ PODS:
   - Firebase/MLVisionLabelModel (5.20.2):
     - Firebase/CoreOnly
     - FirebaseMLVisionLabelModel (= 0.15.0)
+  - Firebase/Storage (5.20.2):
+    - Firebase/CoreOnly
+    - FirebaseStorage (= 3.1.1)
   - firebase_analytics (0.0.1):
     - Firebase/Core
     - Flutter
@@ -46,6 +49,9 @@ PODS:
   - firebase_ml_vision (0.1.1):
     - Firebase/Core
     - Firebase/MLVision
+    - Flutter
+  - firebase_storage (0.0.1):
+    - Firebase/Storage
     - Flutter
   - FirebaseAnalytics (5.8.1):
     - FirebaseCore (~> 5.4)
@@ -101,6 +107,10 @@ PODS:
     - GoogleMobileVision/Detector (~> 1.4)
   - FirebaseMLVisionLabelModel (0.15.0):
     - GoogleMobileVision/LabelDetector (~> 1.4)
+  - FirebaseStorage (3.1.1):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 5.2)
+    - GTMSessionFetcher/Core (~> 1.1)
   - Flutter (1.0.0)
   - google_sign_in (0.0.1):
     - Flutter
@@ -198,6 +208,7 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_ml_vision (from `.symlinks/plugins/firebase_ml_vision/ios`)
+  - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
@@ -217,6 +228,7 @@ SPEC REPOS:
     - FirebaseMLCommon
     - FirebaseMLVision
     - FirebaseMLVisionLabelModel
+    - FirebaseStorage
     - GoogleAPIClientForREST
     - GoogleAppMeasurement
     - GoogleMobileVision
@@ -243,6 +255,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_ml_vision:
     :path: ".symlinks/plugins/firebase_ml_vision/ios"
+  firebase_storage:
+    :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
   google_sign_in:
@@ -261,6 +275,7 @@ SPEC CHECKSUMS:
   firebase_auth: e32ab45c234bdf847b7777f5b097ce4f7d26879f
   firebase_core: ce5006bb48508ee4e71e0f429a3f519bb8ee2961
   firebase_ml_vision: af45e6730db9be6b6fa2a50292899f65ecfa8777
+  firebase_storage: 2543f377090a6e219caab9224dead5bbcb30ef33
   FirebaseAnalytics: ece1aa57a4f43c64d53a648b5a5e05151aae947b
   FirebaseAuth: dd7bbf03a5aee0eafb3a1aee4d2812bd74bac890
   FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
@@ -271,6 +286,7 @@ SPEC CHECKSUMS:
   FirebaseMLCommon: 192c49ec584f1fb559747f1da8052441158b04d7
   FirebaseMLVision: 257d9f1eaac1565f4dac67adf8b76805fa2a9a80
   FirebaseMLVisionLabelModel: 06f4d3bfe538cd19e8379fe215efcb89779603aa
+  FirebaseStorage: 6162ef4322502b818d9de0ec552f5226d283de43
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
   google_sign_in: 27e70a98b529f0b076d4b19f231b81da28b1750b
   GoogleAPIClientForREST: 44c7b678cbab11d26a47eab7309d6179b1a61f0c
