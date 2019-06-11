@@ -2,8 +2,8 @@ import 'package:calorie_count/main.dart';
 import 'package:flutter/material.dart';
 
 class CalorieCalc extends StatelessWidget {
-  QuestionAnswers ans;
-  var units;
+  final QuestionAnswers ans;
+  final String units;
   CalorieCalc({this.ans, this.units});
 
   int calories;
@@ -88,7 +88,7 @@ class CalorieCalc extends StatelessWidget {
                   child: Wrap(
                     children: <Widget>[
                       Text(
-                        "Based on your answers, your total daily calorie intake has been calculate to help you reach your goal! Your recommended intake is displayed below. You can edit it or simply click 'Save' to continue",
+                        "Based on your answers, your total daily calorie intake has been calculate to help you reach your goal! Your recommended intake is displayed below. You can take the quiz again in settings",
                         style: TextStyle(fontSize: 16.0, color: Colors.white),
                         textAlign: TextAlign.center,
                       ),
@@ -101,13 +101,11 @@ class CalorieCalc extends StatelessWidget {
               ),
             ),
             Padding(padding: EdgeInsets.all(32.0)),
-            // ListWheelScrollView(
-
-            // ),
             Container(
               padding: EdgeInsets.only(
                   top: 20.0, bottom: 20.0, left: 70.0, right: 70.0),
-              child: Text(
+              child:
+              Text(
                 calories.toString(),
                 style: TextStyle(fontSize: 40.0, color: AppColours().offBlack),
               ),

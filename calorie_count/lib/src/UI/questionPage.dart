@@ -7,6 +7,9 @@ import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
 
 class QuestionPage extends StatefulWidget {
+  
+
+
   @override
   State<StatefulWidget> createState() {
     return QuestionPageState();
@@ -17,15 +20,14 @@ TextEditingController ageController = new TextEditingController();
 TextEditingController heightController = new TextEditingController();
 TextEditingController weightController = new TextEditingController();
 
-class QuestionPageState extends State<QuestionPage>
-    with TickerProviderStateMixin {
+class QuestionPageState extends State<QuestionPage> {
   double age, height, weight;
   int currentIndex = 0;
   String exerTimes, goal, gender, activityLevel, loseGain, unit;
   bool completed, _valid = false;
   final formKey = GlobalKey<FormState>();
   AppColours c = new AppColours();
-  //QuestionAnswers calorieGoal = new QuestionAnswers();
+  bool emptyText = true;
   
   List questions = [
     "How old are you?",
@@ -90,7 +92,7 @@ class QuestionPageState extends State<QuestionPage>
                 height: 50.0,
                 child: GestureDetector(
                   onTap: () {
-                    if (_valid && currentIndex < 7) { //only let user continue if they answered the question
+                    if (_valid  && currentIndex < 7) { //only let user continue if they answered the question
                       setState(() {
                         currentIndex += 1;
                         _valid = false;
@@ -238,7 +240,8 @@ class QuestionPageState extends State<QuestionPage>
                             ],
                             maxLength: 3,
                             controller: controllerName,
-                            keyboardType: TextInputType.number,
+                            //keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.text,
                             textAlign: TextAlign.center,
                             validator: (value) {
                               if (value.isEmpty) {

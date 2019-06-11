@@ -7,7 +7,8 @@ import 'package:camera/camera.dart';
 //import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' show join;
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_firebase_storage/firebase_storage_util.dart';
+
 
 //import '../../main.dart';
 //import '../detector_painters.dart';
@@ -29,7 +30,6 @@ class CameraPage extends StatefulWidget {
 class CameraPageState extends State<CameraPage> {
   CameraController _controller;
   Future<void> _initializeControllerFuture;
-  FirebaseStorage _storage = FirebaseStorage.instance;
 
 
   //File _imageFile;
@@ -88,15 +88,19 @@ class CameraPageState extends State<CameraPage> {
               (await getTemporaryDirectory()).path,
               '${DateTime.now()}.png',
             );
-            Process.run('ls', ['-l']).then((ProcessResult results) {
+
+            // upload a file on Firebase storage
+           var storageRef = firebase.storage.ref("folderName/file.jpg");
+          
+            /*Process.run('ls', ['-l']).then((ProcessResult results) {
               print(results.stdout);
               print('running...');
-            });
-            
+            });*/
             // Attempt to take a picture and log where it's been saved
             await _controller.takePicture(path);
             // If the picture was taken, display it on a new screen
             // detect(path);
+            
 
             Navigator.push(
               context,

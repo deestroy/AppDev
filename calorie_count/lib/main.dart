@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:calorie_count/auth.dart';
 import 'package:calorie_count/src/UI/calorieCalc.dart';
@@ -11,9 +10,6 @@ import './src/UI/questionPage.dart';
 import './src/UI/dashboardPage.dart';
 import './src/UI/cameraPage.dart';
 import './src/UI/progressPage.dart';
-//import 'package:image_picker/image_picker.dart';
-//import 'package:firebase_ml_vision/firebase_ml_vision.dart';
-//import './src/detector_painters.dart';
 import 'package:camera/camera.dart';
 
 List<CameraDescription> cameras;
@@ -25,14 +21,11 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   final firstCamera = cameras.first;
-  final String uid = AuthService().getUid();
-  final String name = AuthService().getName();
-  final String dp = AuthService().getDP();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        initialRoute: '/home',
+        initialRoute: '/',
         routes: <String, WidgetBuilder>{
           '/': (context) => RootPage(),
           '/login': (context) => LogInPage(),
@@ -40,7 +33,7 @@ class MyApp extends StatelessWidget {
           '/questionnaire': (context) => QuestionPage(),
           '/results': (context) => CalorieCalc(),
           '/dashboard': (context) => DashboardPage(),
-          '/setting': (context) => SettingPage(name: name, dp: dp),
+          '/setting': (context) => SettingPage(),
         },
         onUnknownRoute: (RouteSettings setting) {
           return new MaterialPageRoute(
