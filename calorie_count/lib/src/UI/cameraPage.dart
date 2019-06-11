@@ -7,7 +7,7 @@ import 'package:camera/camera.dart';
 //import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' show join;
-import 'package:flutter_firebase_storage/firebase_storage_util.dart';
+//import 'package:flutter_firebase_storage/firebase_storage_util.dart';
 
 
 //import '../../main.dart';
@@ -90,7 +90,7 @@ class CameraPageState extends State<CameraPage> {
             );
 
             // upload a file on Firebase storage
-           var storageRef = firebase.storage.ref("folderName/file.jpg");
+           //var storageRef = firebase.storage.ref("folderName/file.jpg");
           
             /*Process.run('ls', ['-l']).then((ProcessResult results) {
               print(results.stdout);

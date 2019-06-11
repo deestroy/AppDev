@@ -1,13 +1,17 @@
 import 'package:calorie_count/main.dart';
+import 'package:calorie_count/src/database.dart';
 import 'package:flutter/material.dart';
 
 class CalorieCalc extends StatelessWidget {
+  final firstCamera = cameras.first;
   final QuestionAnswers ans;
   final String units;
   CalorieCalc({this.ans, this.units});
 
-  int calories;
+  int calories = 0;
   double bmr;
+
+  Database db = new Database();
   
   setCalories(QuestionAnswers ans, String unit) {
     //Metric Calculations
@@ -24,7 +28,7 @@ class CalorieCalc extends StatelessWidget {
         if (calories < 1200) {
           calories = 1200;
         }
-        print("This male should be consuming $calories calories");
+        ("This male should be consuming $calories calories");
       } else if (ans.getGender() == 1) {
         //female
         bmr = ((655.1 +
@@ -70,6 +74,10 @@ class CalorieCalc extends StatelessWidget {
       } 
     }
   } //setCalories
+
+  getCalories() {
+    return calories;
+  }
  
   @override
   Widget build(BuildContext context) {
@@ -121,7 +129,9 @@ class CalorieCalc extends StatelessWidget {
                 child: Text("Save",
                     style: TextStyle(fontSize: 16.0, color: Colors.white)),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/home');
+                  //write answers to database
+                  db.addData(ans, calories);
+                 Navigator.push(context, new MaterialPageRoute(builder: (context) => HomePage(camera: firstCamera)));
                 },
               ),
               decoration: BoxDecoration(
@@ -139,6 +149,7 @@ class CalorieCalc extends StatelessWidget {
 //question object to be passed to make calculations
 class QuestionAnswers {
   double age, height, weight, gender, activitylvl, loseGain;
+  String actLvlString, loseGainString;
 
   QuestionAnswers(
       double a, double h, double w, String gen, String pa, String goal) {
@@ -174,36 +185,50 @@ class QuestionAnswers {
   //setting the number you need to multiply by to get BMR
   setActLvl(String pa) {
     if (pa == "noX") {
+      actLvlString = "Sedentary";
       activitylvl = 1.2;
     } else if (pa == "lightX") {
+      actLvlString = "Lightly Active";
       activitylvl = 1.375;
     } else if (pa == "moderateX") {
+      actLvlString = "Moderately Active";
       activitylvl = 1.55;
     } else if (pa == "activeX") {
+      actLvlString = "Active";
       activitylvl = 1.725;
     } else if (pa == "extremeX") {
+      actLvlString = "Very Active";
       activitylvl = 1.9;
     }
   }
 
   setLoseGain(String goal) {
     if (goal == "lose1") {
+      loseGainString = "Lose 0.5 lbs/ week";
       loseGain = -250.0;
     } else if (goal == "lose2") {
+      loseGainString = "Lose 1.0 lbs/ week";
       loseGain = -500.0;
     } else if (goal == "lose3") {
+      loseGainString = "Lose 1.5 lbs/ week";
       loseGain = -750.0;
     } else if (goal == "lose4") {
+      loseGainString = "Lose 2.0 lbs/ week";
       loseGain = -1000.0;
     } else if (goal == "maintain") {
+      loseGainString = "Maintain weight";
       loseGain = 250.0;
     } else if (goal == "gain1") {
+      loseGainString = "Gain 0.5 lbs/ week";
       loseGain = 250.0;
     } else if (goal == "gain2") {
+      loseGainString = "Gain 1.0 lbs/ week";
       loseGain = 500.0;
     } else if (goal == "gain3") {
+      loseGainString = "Gain 1.5 lbs/ week";
       loseGain = 750.0;
     } else if (goal == "gain4") {
+      loseGainString = "Gain 2.0 lbs/ week";
       loseGain = 1000.0;
     }
   }
@@ -229,7 +254,16 @@ class QuestionAnswers {
     return activitylvl;
   }
 
+  getActLvlString() {
+    return actLvlString;
+  }
+
   getLoseGain() {
     return loseGain;
   }
+
+  getLoseGainString() {
+    return loseGainString;
+  }
+
 } //QuestionAnswers

@@ -1,4 +1,5 @@
 import 'package:calorie_count/main.dart';
+import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:calorie_count/src/UI/settingPage.dart';
 import 'package:calorie_count/src/foodData.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 class DashboardPage extends StatelessWidget {
+  final int calories = CalorieCalc().getCalories();
+
   @override
   Widget build(BuildContext context) {
     final ui.Size logicalSize = MediaQuery.of(context).size;
@@ -70,7 +73,7 @@ class DashboardPage extends StatelessWidget {
                               ),
                             );
                           } else {
-                            return null;
+                            return Container();
                           }
                         }),
                   ],
@@ -78,7 +81,7 @@ class DashboardPage extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
+              padding: EdgeInsets.only(bottom: 6.0),
             ),
             Row(
               //SECOND ROW TO CHANGE DATE
@@ -129,7 +132,7 @@ class DashboardPage extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    "Calorie Goal\tXX", //TODO: Pull numbers
+                    "Calorie Goal\t$calories", //TODO: Pull numbers
                     style: TextStyle(fontSize: 14.0),
                     textAlign: TextAlign.center,
                   ),

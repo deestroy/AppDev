@@ -7,13 +7,8 @@ import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
 
 class QuestionPage extends StatefulWidget {
-  
-
-
   @override
-  State<StatefulWidget> createState() {
-    return QuestionPageState();
-  }
+  State<StatefulWidget> createState() => QuestionPageState();
 }
 
 TextEditingController ageController = new TextEditingController();
@@ -28,7 +23,7 @@ class QuestionPageState extends State<QuestionPage> {
   final formKey = GlobalKey<FormState>();
   AppColours c = new AppColours();
   bool emptyText = true;
-  
+
   List questions = [
     "How old are you?",
     "How tall are you in ?",
@@ -41,7 +36,7 @@ class QuestionPageState extends State<QuestionPage> {
   List<ExerQ> exerQuestion = [
     ExerQ('noX', 'Sedentary: Little to no exercise'),
     ExerQ('lightX', 'Lightly Active: Exercise 1-3 days/week'),
-    ExerQ('moderateX', 'Active: Moderate exercise 3-5 days/week'),
+    ExerQ('moderateX', 'Moderately Active: Exercise 3-5 days/week'),
     ExerQ('activeX', 'Active: Heavy exercise 6-7 days'),
     ExerQ("extremeX", "Very Active: Non-stop training")
   ];
@@ -60,19 +55,18 @@ class QuestionPageState extends State<QuestionPage> {
 
   List<GenderQ> genderQuestion = [GenderQ("M", "Male"), GenderQ("F", "Female")];
 
-@override
-  void dispose() {
-    ageController.dispose();
-    heightController.dispose();
-    weightController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   ageController.dispose();
+  //   heightController.dispose();
+  //   weightController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final ui.Size logicalSize = MediaQuery.of(context).size;
     final double _width = logicalSize.width;
-
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Center(
@@ -82,9 +76,7 @@ class QuestionPageState extends State<QuestionPage> {
         ),
       ),
       bottomNavigationBar: currentIndex != 0
-          ?
-          //_animateController.isCompleted ?
-          BottomAppBar(
+          ? BottomAppBar(
               child: Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -92,26 +84,29 @@ class QuestionPageState extends State<QuestionPage> {
                 height: 50.0,
                 child: GestureDetector(
                   onTap: () {
-                    if (_valid  && currentIndex < 7) { //only let user continue if they answered the question
+                    if (_valid && currentIndex < 7) {
+                      //only let user continue if they answered the question
                       setState(() {
                         currentIndex += 1;
                         _valid = false;
                       });
                     }
-
                     //When questionnaire is finished, calculate user's calorie intake
                     if (currentIndex == 7) {
                       //make an object containing all the answers to pass through
-                       QuestionAnswers calorieGoal =  new QuestionAnswers(
+                      QuestionAnswers calorieGoal = new QuestionAnswers(
                           age, height, weight, gender, activityLevel, goal);
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => new CalorieCalc(ans: calorieGoal, units: unit)));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => new CalorieCalc(
+                                  ans: calorieGoal, units: unit)));
                     }
                   },
                   child: Center(
                       child: Text(
                     currentIndex < 5 ? 'Continue' : 'Finish',
-                    style:
-                        TextStyle(fontSize: 20.0, color: c.coral),
+                    style: TextStyle(fontSize: 20.0, color: c.coral),
                   )),
                 ),
               ),
@@ -129,16 +124,16 @@ class QuestionPageState extends State<QuestionPage> {
         currentIndex == 0
             ? _firstPage()
             : currentIndex == 1
-                ? _inputQuestion(ageController, "Question 1", questions[0])
+                ? inputQuestion(ageController, "Question 1", questions[0])
                 : currentIndex == 2
-                    ? _inputQuestion(
+                    ? inputQuestion(
                         heightController, "Question 2", questions[1])
                     : currentIndex == 3
-                        ? _inputQuestion(
+                        ? inputQuestion(
                             weightController, "Question 3", questions[2])
                         : currentIndex == 4
-                            ? _getGenderQ()
-                            : currentIndex == 5 ? _getActLvlQ() : _getGoalQ()
+                            ? getGenderQ()
+                            : currentIndex == 5 ? getActLvlQ() : getGoalQ()
       ],
     );
   }
@@ -149,18 +144,16 @@ class QuestionPageState extends State<QuestionPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            // Padding(padding: EdgeInsets.only(top: 16.0),),
-            Text(
-              "Insert Logo",
-              style: TextStyle(fontSize: 30.0),
-            ),
+            Expanded(
+                child: Center(
+                    child: FlutterLogo(
+              size: 150.0,
+            ))),
             Padding(padding: EdgeInsets.only(bottom: 100.0)),
             Text(
               'Calorie Intake Calculator',
               style: TextStyle(
-                  color: c.coral,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24.0),
+                  color: c.coral, fontWeight: FontWeight.bold, fontSize: 24.0),
               textAlign: TextAlign.left,
             ),
             Padding(padding: EdgeInsets.only(bottom: 16.0)),
@@ -216,7 +209,7 @@ class QuestionPageState extends State<QuestionPage> {
   }
 
   //returns a Widget that displays a question and a TextField
-  Widget _inputQuestion(controllerName, String quesNum, String ques) {
+  Widget inputQuestion(controllerName, String quesNum, String ques) {
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(top: 34.0),
@@ -240,7 +233,6 @@ class QuestionPageState extends State<QuestionPage> {
                             ],
                             maxLength: 3,
                             controller: controllerName,
-                            //keyboardType: TextInputType.number,
                             keyboardType: TextInputType.text,
                             textAlign: TextAlign.center,
                             validator: (value) {
@@ -256,7 +248,7 @@ class QuestionPageState extends State<QuestionPage> {
                               ),
                             ),
                             onFieldSubmitted: (String a) {
-                              _submitted(a, ques, controllerName);
+                              submitted(a, ques, controllerName);
                             }),
                       ],
                     ))),
@@ -267,23 +259,20 @@ class QuestionPageState extends State<QuestionPage> {
   } //inputQuestion
 
   //function that sets a varaible depending on what question was asked
-  _submitted(String a, String q, TextEditingController controller) {
+  submitted(String a, String q, TextEditingController controller) {
     final form = formKey.currentState;
     if (form.validate()) {
       form.save();
       if (q == questions[0]) {
         setState(() {
           age = double.parse(a);
-          print("Age is $age");
           _valid = true; //user answered so they can now continue to the next Q
         });
       } else if (q == questions[1]) {
         height = double.parse(a);
-        print("Height is $height");
         _valid = true; //user answered so they can now continue to the next Q
       } else if (q == questions[2]) {
         weight = double.parse(a);
-        print("Weight is $weight");
         _valid = true; //user answered so they can now continue to the next Q
       }
     }
@@ -308,7 +297,7 @@ class QuestionPageState extends State<QuestionPage> {
   }
 
   //Returns a Widget containing the gender question w/ a card and radio buttons
-  Widget _getGenderQ() {
+  Widget getGenderQ() {
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(top: 34.0),
@@ -332,7 +321,6 @@ class QuestionPageState extends State<QuestionPage> {
                           onTapUp: (detail) {
                             setState(() {
                               gender = using.identifier;
-                              print(gender);
                               _valid = true;
                             });
                           },
@@ -352,7 +340,6 @@ class QuestionPageState extends State<QuestionPage> {
                                         onChanged: (String value) {
                                           setState(() {
                                             gender = value;
-                                            print("changed");
                                           });
                                         }),
                                     Text(using.displayContent)
@@ -379,7 +366,7 @@ class QuestionPageState extends State<QuestionPage> {
   } //exerciseQuestion
 
   //Returns a Widget containing the activity level question w/ a card and radio buttons
-  Widget _getActLvlQ() {
+  Widget getActLvlQ() {
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(top: 34.0),
@@ -403,8 +390,8 @@ class QuestionPageState extends State<QuestionPage> {
                             setState(() {
                               exerTimes = using.identifier;
                               activityLevel = using.identifier;
-                              print(exerTimes);
-                              _valid = true; //user answered so they can now continue to the next Q
+                              _valid =
+                                  true; //user answered so they can now continue to the next Q
                             });
                           },
                           child: Container(
@@ -449,7 +436,7 @@ class QuestionPageState extends State<QuestionPage> {
   } //exerciseQuestion
 
   //Returns a Widget containing the goal question w/ a card and radio buttons
-  Widget _getGoalQ() {
+  Widget getGoalQ() {
     return Expanded(
       child: SingleChildScrollView(
         child: Column(
@@ -473,8 +460,8 @@ class QuestionPageState extends State<QuestionPage> {
                           setState(() {
                             goal = using.identifier;
                             loseGain = using.identifier;
-                            print(goal);
-                            _valid = true; //user answered so they can now continue to the next Q
+                            _valid =
+                                true; //user answered so they can now continue to the next Q
                           });
                         },
                         child: Container(
@@ -565,3 +552,4 @@ class GoalQ {
   final String displayContent;
   GoalQ(this.identifier, this.displayContent);
 }
+

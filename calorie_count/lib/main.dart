@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:calorie_count/auth.dart';
 import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:calorie_count/src/UI/loginPage.dart';
 import 'package:calorie_count/src/UI/rootPage.dart';
@@ -36,8 +34,9 @@ class MyApp extends StatelessWidget {
           '/setting': (context) => SettingPage(),
         },
         onUnknownRoute: (RouteSettings setting) {
+          print("Unknown route");
           return new MaterialPageRoute(
-              builder: (context) => HomePage(camera: firstCamera));
+              builder: (context) => LogInPage());
         });
   } //build
 }
