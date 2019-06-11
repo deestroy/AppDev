@@ -11,11 +11,11 @@ class QuestionPage extends StatefulWidget {
   State<StatefulWidget> createState() => QuestionPageState();
 }
 
-class QuestionPageState extends State<QuestionPage> {
-  TextEditingController ageController = new TextEditingController();
-  TextEditingController heightController = new TextEditingController();
-  TextEditingController weightController = new TextEditingController();
+TextEditingController ageController = new TextEditingController();
+TextEditingController heightController = new TextEditingController();
+TextEditingController weightController = new TextEditingController();
 
+class QuestionPageState extends State<QuestionPage> {
   double age, height, weight;
   int currentIndex = 0;
   String exerTimes, goal, gender, activityLevel, loseGain, unit;
@@ -55,19 +55,18 @@ class QuestionPageState extends State<QuestionPage> {
 
   List<GenderQ> genderQuestion = [GenderQ("M", "Male"), GenderQ("F", "Female")];
 
-  @override
-  void dispose() {
-    ageController.dispose();
-    heightController.dispose();
-    weightController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   ageController.dispose();
+  //   heightController.dispose();
+  //   weightController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final ui.Size logicalSize = MediaQuery.of(context).size;
     final double _width = logicalSize.width;
-
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Center(
@@ -77,9 +76,7 @@ class QuestionPageState extends State<QuestionPage> {
         ),
       ),
       bottomNavigationBar: currentIndex != 0
-          ?
-          //_animateController.isCompleted ?
-          BottomAppBar(
+          ? BottomAppBar(
               child: Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -127,16 +124,16 @@ class QuestionPageState extends State<QuestionPage> {
         currentIndex == 0
             ? _firstPage()
             : currentIndex == 1
-                ? _inputQuestion(ageController, "Question 1", questions[0])
+                ? inputQuestion(ageController, "Question 1", questions[0])
                 : currentIndex == 2
-                    ? _inputQuestion(
+                    ? inputQuestion(
                         heightController, "Question 2", questions[1])
                     : currentIndex == 3
-                        ? _inputQuestion(
+                        ? inputQuestion(
                             weightController, "Question 3", questions[2])
                         : currentIndex == 4
-                            ? _getGenderQ()
-                            : currentIndex == 5 ? _getActLvlQ() : _getGoalQ()
+                            ? getGenderQ()
+                            : currentIndex == 5 ? getActLvlQ() : getGoalQ()
       ],
     );
   }
@@ -147,10 +144,11 @@ class QuestionPageState extends State<QuestionPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            Text(
-              "Insert Logo",
-              style: TextStyle(fontSize: 30.0),
-            ),
+            Expanded(
+                child: Center(
+                    child: FlutterLogo(
+              size: 150.0,
+            ))),
             Padding(padding: EdgeInsets.only(bottom: 100.0)),
             Text(
               'Calorie Intake Calculator',
@@ -211,7 +209,7 @@ class QuestionPageState extends State<QuestionPage> {
   }
 
   //returns a Widget that displays a question and a TextField
-  Widget _inputQuestion(controllerName, String quesNum, String ques) {
+  Widget inputQuestion(controllerName, String quesNum, String ques) {
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(top: 34.0),
@@ -235,7 +233,6 @@ class QuestionPageState extends State<QuestionPage> {
                             ],
                             maxLength: 3,
                             controller: controllerName,
-                            //keyboardType: TextInputType.number,
                             keyboardType: TextInputType.text,
                             textAlign: TextAlign.center,
                             validator: (value) {
@@ -251,7 +248,7 @@ class QuestionPageState extends State<QuestionPage> {
                               ),
                             ),
                             onFieldSubmitted: (String a) {
-                              _submitted(a, ques, controllerName);
+                              submitted(a, ques, controllerName);
                             }),
                       ],
                     ))),
@@ -262,7 +259,7 @@ class QuestionPageState extends State<QuestionPage> {
   } //inputQuestion
 
   //function that sets a varaible depending on what question was asked
-  _submitted(String a, String q, TextEditingController controller) {
+  submitted(String a, String q, TextEditingController controller) {
     final form = formKey.currentState;
     if (form.validate()) {
       form.save();
@@ -300,7 +297,7 @@ class QuestionPageState extends State<QuestionPage> {
   }
 
   //Returns a Widget containing the gender question w/ a card and radio buttons
-  Widget _getGenderQ() {
+  Widget getGenderQ() {
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(top: 34.0),
@@ -369,7 +366,7 @@ class QuestionPageState extends State<QuestionPage> {
   } //exerciseQuestion
 
   //Returns a Widget containing the activity level question w/ a card and radio buttons
-  Widget _getActLvlQ() {
+  Widget getActLvlQ() {
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(top: 34.0),
@@ -439,7 +436,7 @@ class QuestionPageState extends State<QuestionPage> {
   } //exerciseQuestion
 
   //Returns a Widget containing the goal question w/ a card and radio buttons
-  Widget _getGoalQ() {
+  Widget getGoalQ() {
     return Expanded(
       child: SingleChildScrollView(
         child: Column(
@@ -555,3 +552,4 @@ class GoalQ {
   final String displayContent;
   GoalQ(this.identifier, this.displayContent);
 }
+

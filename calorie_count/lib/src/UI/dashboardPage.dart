@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 class DashboardPage extends StatelessWidget {
+  final int calories = CalorieCalc().getCalories();
+
   @override
   Widget build(BuildContext context) {
     final ui.Size logicalSize = MediaQuery.of(context).size;
@@ -130,7 +132,7 @@ class DashboardPage extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    "Calorie Goal\t", //TODO: Pull numbers
+                    "Calorie Goal\t$calories", //TODO: Pull numbers
                     style: TextStyle(fontSize: 14.0),
                     textAlign: TextAlign.center,
                   ),

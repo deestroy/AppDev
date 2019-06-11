@@ -20,10 +20,5 @@ class Database {
     }, merge: true);
   }
 
-  // uploadPicture(String pictureName, File fileName) {
-  //   final StorageReference storageref = FirebaseStorage.instance.ref().child(pictureName);
-  //   final StorageUploadTask task = storageref.putFile(fileName);
-  // }
-    
-    
+
 }

@@ -3,11 +3,12 @@ import 'package:calorie_count/src/database.dart';
 import 'package:flutter/material.dart';
 
 class CalorieCalc extends StatelessWidget {
+  final firstCamera = cameras.first;
   final QuestionAnswers ans;
   final String units;
   CalorieCalc({this.ans, this.units});
 
-  int calories;
+  int calories = 0;
   double bmr;
 
   Database db = new Database();
@@ -73,6 +74,10 @@ class CalorieCalc extends StatelessWidget {
       } 
     }
   } //setCalories
+
+  getCalories() {
+    return calories;
+  }
  
   @override
   Widget build(BuildContext context) {
@@ -126,7 +131,7 @@ class CalorieCalc extends StatelessWidget {
                 onPressed: () {
                   //write answers to database
                   db.addData(ans, calories);
-                  Navigator.pushNamed(context, '/home');
+                 Navigator.push(context, new MaterialPageRoute(builder: (context) => HomePage(camera: firstCamera)));
                 },
               ),
               decoration: BoxDecoration(

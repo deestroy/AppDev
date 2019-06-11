@@ -16,7 +16,7 @@ class LogInPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Text(
-              'APP NAME',
+              'CALORIE COUNTER',
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

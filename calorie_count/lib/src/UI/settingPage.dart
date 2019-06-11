@@ -1,5 +1,6 @@
 import 'package:calorie_count/auth.dart';
 import 'package:calorie_count/main.dart';
+import 'package:calorie_count/src/UI/questionPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -63,7 +64,11 @@ class SettingPage extends StatelessWidget {
                         EdgeInsets.only(top: 50.0, bottom: 16.0, left: 25.0),
                     child: FlatButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/questionnaire');
+                        
+                        Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) => QuestionPage()));
                       },
                       child: Text("Edit Goals",
                           style: TextStyle(
