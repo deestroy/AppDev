@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:calorie_count/src/UI/calorieCalc.dart';
+import 'package:calorie_count/src/UI/editQuesitonPage.dart';
 import 'package:calorie_count/src/UI/loginPage.dart';
 import 'package:calorie_count/src/UI/rootPage.dart';
 import 'package:calorie_count/src/UI/settingPage.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
           '/results': (context) => CalorieCalc(),
           '/dashboard': (context) => DashboardPage(),
           '/setting': (context) => SettingPage(),
+          '/edit': (context) => EditQuestionnaire(),
         },
         onUnknownRoute: (RouteSettings setting) {
           print("Unknown route");

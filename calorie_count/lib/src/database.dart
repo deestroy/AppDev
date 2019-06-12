@@ -20,5 +20,20 @@ class Database {
     }, merge: true);
   }
 
+  Future<void> updateData(QuestionAnswers q, int calories) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance.collection('questionnaire').document(user.uid).updateData({
+      'age': q.getAge(),
+      'height': q.getHeight(),
+      'weight': q.getWeight(),
+      'gender': q.getGender(),
+      'activityLvl': q.getActLvlString(),
+      'goal': q.getLoseGainString(),
+      'calories': calories
+    });
+  }
+
+  
+
 
 }

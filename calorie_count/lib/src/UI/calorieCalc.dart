@@ -1,4 +1,5 @@
 import 'package:calorie_count/main.dart';
+import 'package:calorie_count/src/UI/editQuesitonPage.dart';
 import 'package:calorie_count/src/database.dart';
 import 'package:flutter/material.dart';
 
@@ -130,7 +131,11 @@ class CalorieCalc extends StatelessWidget {
                     style: TextStyle(fontSize: 16.0, color: Colors.white)),
                 onPressed: () {
                   //write answers to database
-                  db.addData(ans, calories);
+                  if (EditQuestionnaireState().edited == true) {
+                    db.updateData(ans, calories);
+                  } else {
+                    db.addData(ans, calories);
+                  }
                  Navigator.push(context, new MaterialPageRoute(builder: (context) => HomePage(camera: firstCamera)));
                 },
               ),

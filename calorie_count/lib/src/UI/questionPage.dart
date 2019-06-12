@@ -1,7 +1,5 @@
-import 'package:calorie_count/auth.dart';
 import 'package:calorie_count/main.dart';
 import 'package:calorie_count/src/UI/calorieCalc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
@@ -55,13 +53,13 @@ class QuestionPageState extends State<QuestionPage> {
 
   List<GenderQ> genderQuestion = [GenderQ("M", "Male"), GenderQ("F", "Female")];
 
-  // @override
-  // void dispose() {
-  //   ageController.dispose();
-  //   heightController.dispose();
-  //   weightController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    ageController.dispose();
+    heightController.dispose();
+    weightController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

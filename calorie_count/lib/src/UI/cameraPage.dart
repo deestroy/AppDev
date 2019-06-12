@@ -116,7 +116,7 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
   bool uploaded = false;
   final StreamController<bool> streamControl = StreamController<bool>();
 
-  Future getImage(String path, BuildContext context) async {
+  Future getImage(String path) async {
     var tempImage = File(path);
 
     setState(() {
@@ -240,7 +240,7 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
                                     color: Colors.green,
                                     onPressed: () {
                                       _showSnackBar();
-                                      getImage(imagePath,context); //uploads picture to firebase and downloads URL
+                                      getImage(imagePath); //uploads picture to firebase and downloads URL
                                     }),
                               ),
                             ),
@@ -254,144 +254,3 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
             }));
   }// build
 }
-
-//     return Scaffold(
-//       body: Container(
-//         child: Column(
-//           children: <Widget>[
-//             Stack(
-//               children: <Widget>[
-//                 Image.file(File(imagePath)),
-//                 Positioned(
-//                   child: Padding(
-//                     padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
-//                     child: Align(
-//                       alignment: Alignment.topLeft,
-//                       child: BackButton(
-//                         color: Colors.black,
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//                 Positioned(
-//                   right: 5.0,
-//                   child: Padding(
-//                     padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
-//                     child: Align(
-//                       alignment: Alignment.topLeft,
-//                       child: IconButton(
-//                           icon: Icon(Icons.done, size: 30.0),
-//                           color: Colors.green,
-//                           onPressed: () {
-//                             getImage(
-//                                 imagePath, context); //uploads picture to firebase and downloads URL
-
-//                           }),
-//                     ),
-//                   ),
-//                 ),
-//               ],
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   } // build
-//   // try making screen states and making code below a widget
-//   // put navigator.push inside getImage
-// }
-
-// class NP extends StatefulWidget{
-//   final String fileName;
-//   final StreamController controller;
-//   String downloadURL;
-
-//   NP({Key key, this.fileName, this.controller});
-
-//   @override
-//   State<StatefulWidget> createState() {
-//     return NewPicture(fileName: fileName, controller: controller);
-//   }
-
-// }
-
-// class NewPicture extends State<NP> {
-//   final String fileName;
-//   final StreamController controller;
-//   String downloadURL;
-
-//   NewPicture({Key key, this.fileName, this.controller});
-
-//   // Future<String> getdownloadURL() async{
-//   //   print("Url got");
-//   //   downloadURL = await downloadImage(fileName);
-//   //   return downloadURL;
-//   // }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Container(
-//           child: StreamBuilder<bool>(
-//         stream: controller.stream,
-//         builder: (context, AsyncSnapshot<bool> snapshot) {
-//           if (snapshot.data == true) {
-//             return Column(
-//               children: <Widget>[
-//                 Stack(
-//                   children: <Widget>[
-//                     // FutureBuilder(
-//                     //   future: getdownloadURL(),
-//                     //   builder: (context, AsyncSnapshot<String> snapshot) {
-//                     //     if (snapshot.connectionState == ConnectionState.done){
-//                         Image.network(downloadURL), //url is null
-//                         // } else {
-//                         //   return Text("No url");
-//                         // }
-//                      // },
-//                    // ),
-
-//                     Positioned(
-//                       child: Padding(
-//                         padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
-//                         child: Align(
-//                           alignment: Alignment.topLeft,
-//                           child: BackButton(
-//                             color: Colors.black,
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     Positioned(
-//                       right: 5.0,
-//                       child: Padding(
-//                         padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
-//                         child: Align(
-//                           alignment: Alignment.topLeft,
-//                           child: IconButton(
-//                               icon: Icon(Icons.done, size: 30.0),
-//                               color: Colors.red,
-//                               onPressed: () {
-//                                 Navigator.push(
-//                                     context,
-//                                     new MaterialPageRoute(
-//                                         builder: (context) =>
-//                                             HomePage(camera: cameras.first)));
-//                               }),
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 )
-//               ],
-//             );
-//           } else {
-//             return Center(
-//               child: CircularProgressIndicator(),
-//             );
-//           }
-//         },
-//       )),
-//     );
-//   }
-// }
