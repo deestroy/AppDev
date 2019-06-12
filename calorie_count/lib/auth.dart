@@ -82,13 +82,3 @@ class AuthService {
 } //AuthService
 
 final AuthService authService = AuthService();
-
-// class User {
-
-//   getUserUid() async {
-//     FirebaseUser u = await FirebaseAuth.instance.currentUser();
-//     print("User has been received");
-//     return u.uid;
-//   }
-
-// }
