@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+//import 'package:firebase_storage/firebase_storage.dart';
 
 class Database {
   //write questionnaire answers to database

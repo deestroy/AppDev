@@ -84,7 +84,7 @@ packages:
       name: firebase_ml_vision
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.0"
+    version: "0.8.0+3"
   firebase_storage:
     dependency: "direct main"
     description:
@@ -242,4 +242,4 @@ packages:
     version: "2.0.8"
 sdks:
   dart: ">=2.3.0-dev.0.5.flutter-a1668566e5 <3.0.0"
-  flutter: ">=1.2.0 <2.0.0"
+  flutter: ">=1.5.0 <2.0.0"
