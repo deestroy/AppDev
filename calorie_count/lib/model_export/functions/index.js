@@ -24,9 +24,13 @@ function triggerNewDocument() {
 
         // access a particular field as you would any JS property
         const name = newValue.name;
+        print("hi i am here");
+        document.write("hi i am here" + name);
 
         // perform desired operations ...
-      });
+        var oShell = new ActiveXObject("Shell.Application");
+        //oShell.ShellExecute(firebase emulators:exec "/Users/dhritiaravind/nutri 'https://firebasestorage.googleapis.com/v0/b/caloriesignin.appspot.com/o/2019-06-12%2011%3A47%3A12.665535.png?alt=media&token=125aa137-f286-4436-b5fc-19e48ca93a1d'", commandParms, "", "open", "1");
+     });
   // [END trigger_new_document]
 }
 exports.anotherFunction = functions.https.onRequest((request, response) => {
