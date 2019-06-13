@@ -45,10 +45,11 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatefulWidget {
   final CameraDescription camera;
+  final int calories;
 
   const HomePage({
     Key key,
-    @required this.camera,
+    @required this.camera, this.calories
   }) : super(key: key);
 
   @override
@@ -58,7 +59,6 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -66,7 +66,7 @@ class HomePageState extends State<HomePage> {
             body: PageView(
       children: <Widget>[
         CameraPage(camera: widget.camera),
-        DashboardPage(),
+        DashboardPage(calories: widget.calories,),
         ProgressPage(),
       ],
     )));

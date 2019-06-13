@@ -6,18 +6,51 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
-class DashboardPage extends StatelessWidget {
-  final int calories = CalorieCalc().getCalories();
+import '../database.dart';
+
+class DashboardPage extends StatefulWidget {
+  final int calories;
+
+  const DashboardPage({
+    Key key,
+    @required this.calories
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return DashboardPageState();
+  }
+}
+  // int caloriesConsumed = 0;
+  // int caloriesRemaining = 0;
+class DashboardPageState extends State<DashboardPage> {
+  int calories;
+  int caloriesRemaining = 0, caloriesConsumed = 0;
+  Database db = new Database();
+
+@override
+  void initState() {
+   _setCalories();
+    super.initState();
+  }
+
+  _setCalories() async {
+    int temp = await db.getCalories();
+    setState(() {
+      print("$temp");
+      calories = temp;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
     final ui.Size logicalSize = MediaQuery.of(context).size;
     final double screenWidth = logicalSize.width;
 
-    return new Scaffold(
-        body: Container(
+    return Scaffold(
+      body: Container(
       child: SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
         child: Column(
           children: <Widget>[
             Row(
@@ -89,13 +122,15 @@ class DashboardPage extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                     //minus button
-                    child: new OutlineButton(
+                  child: new OutlineButton(
                   shape: new CircleBorder(),
                   borderSide: BorderSide(color: Colors.grey, width: 2.0),
                   highlightedBorderColor: Colors.grey,
                   child: Text("+",
                       style: TextStyle(color: Colors.grey, fontSize: 20.0)),
-                  onPressed: () {},
+                  onPressed: () {
+                    //TODO: change date
+                  },
                 )),
                 Expanded(
                   flex: 3,
@@ -132,7 +167,7 @@ class DashboardPage extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    "Calorie Goal\t$calories", //TODO: Pull numbers
+                    "Calorie Goal\t$calories",
                     style: TextStyle(fontSize: 14.0),
                     textAlign: TextAlign.center,
                   ),
@@ -147,7 +182,7 @@ class DashboardPage extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    "Calories Consumed\tXX",
+                    "Calories Consumed\t$caloriesConsumed",
                     style: TextStyle(fontSize: 14.0),
                     textAlign: TextAlign.center,
                   ),
@@ -162,7 +197,7 @@ class DashboardPage extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    "Calories Remaining\tXX",
+                    "Calories Remaining\t$caloriesRemaining",
                     style: TextStyle(fontSize: 14.0),
                     textAlign: TextAlign.center,
                   ),

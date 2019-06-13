@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class Database {
-
+  //write questionnaire answers to database
   Future<void> addData(QuestionAnswers q, int calories) async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     Firestore.instance.collection('questionnaire').document(user.uid).setData({
@@ -20,6 +20,7 @@ class Database {
     }, merge: true);
   }
 
+  //update user's questionnaire answers
   Future<void> updateData(QuestionAnswers q, int calories) async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     Firestore.instance.collection('questionnaire').document(user.uid).updateData({
@@ -33,7 +34,15 @@ class Database {
     });
   }
 
-  
+   getCalories() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    DocumentSnapshot snapshot = await Firestore.instance.collection('questionnaire').document(user.uid).get();
+    int calories = snapshot['calories'];
+    print("$calories");
+    return calories;
+  }
+
+
 
 
 }
