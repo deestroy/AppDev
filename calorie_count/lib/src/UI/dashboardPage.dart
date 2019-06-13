@@ -72,7 +72,7 @@ class DashboardPageState extends State<DashboardPage> {
   }
 
   getData(String mealtime) async {
-    String date = DateFormat.yMMMMd("en_US").format(DateTime.now());
+    String date = DateFormat.yMMMMd("en_US").format(today);
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     QuerySnapshot querySnapshots = await Firestore.instance.collection('foodDB').document(user.uid).collection(date).document(date).collection(mealtime).getDocuments();
     
@@ -80,7 +80,7 @@ class DashboardPageState extends State<DashboardPage> {
   }
 
   getLength(String mealtime) async {
-    String date = DateFormat.yMMMMd("en_US").format(DateTime.now());
+    String date = DateFormat.yMMMMd("en_US").format(today);
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     QuerySnapshot querySnapshots = await Firestore.instance.collection('foodDB').document(user.uid).collection(date).document(date).collection(mealtime).getDocuments();
     
@@ -174,6 +174,7 @@ class DashboardPageState extends State<DashboardPage> {
                       style: TextStyle(color: Colors.grey, fontSize: 20.0)),
                   onPressed: () {
                     _removeDay();
+                    _setLength();
                   },
                 )),
                 Expanded(
@@ -188,6 +189,7 @@ class DashboardPageState extends State<DashboardPage> {
                       onPressed: () {
                         setState(() {
                           today = DateTime.now();
+                          _setLength();
                         });
                       },
                       child:  Text(
@@ -210,6 +212,7 @@ class DashboardPageState extends State<DashboardPage> {
                       style: TextStyle(color: Colors.grey, fontSize: 20.0)),
                   onPressed: () {
                     _addDay();
+                    _setLength();
                   },
                 ))
               ],
@@ -334,7 +337,6 @@ class DashboardPageState extends State<DashboardPage> {
       );
   } //build
 
-
   _foodList(List food, String mealtime) {
     return FutureBuilder(
       future: getData(mealtime),
@@ -376,37 +378,6 @@ class DashboardPageState extends State<DashboardPage> {
 
 
   }
-
-  // _foodList(List food) {
-  //   return ListView.builder(
-  //     padding: EdgeInsets.all(0.0),
-  //     physics: NeverScrollableScrollPhysics(),
-  //     itemCount: food.length,
-  //     itemBuilder: (context, i) => Column(
-  //           children: <Widget>[
-  //             ListTile(
-  //               title: Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                 children: <Widget>[
-  //                   Text(food[i].foodName.toString(),
-  //                       style: TextStyle(fontSize: 14.0, color: Colors.grey)),
-  //                   Text(food[i].calories.toString(),
-  //                       style: TextStyle(fontSize: 12.0, color: Colors.grey)),
-  //                 ],
-  //               ),
-  //               subtitle: Container(
-  //                 // padding: EdgeInsets.only(top: 5.0),
-  //                 child: Text(food[i].servingSize.toString() + " " + food[i].unit.toString(),
-  //                     style: TextStyle(fontSize: 10.0)),
-  //               ),
-  //             ),
-  //             Divider(
-  //               height: 0.0, //no padding
-  //             ),
-  //           ],
-  //         ),
-  //   );
-  // }
 
   //returns a Widget that displays title of meal and a plus button to add more meals
   _header(String mealTime, double screenWidth) {
@@ -457,3 +428,4 @@ class DashboardPageState extends State<DashboardPage> {
         ));
   }
 } //Dashboard page
+
