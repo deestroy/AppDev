@@ -10,7 +10,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' show join;
-import 'package:zoomable_image/zoomable_image.dart';
 
 class CameraPage extends StatefulWidget {
   final CameraDescription camera;

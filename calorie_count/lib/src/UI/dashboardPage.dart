@@ -2,9 +2,11 @@ import 'package:calorie_count/main.dart';
 import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:calorie_count/src/UI/settingPage.dart';
 import 'package:calorie_count/src/foodData.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
+import 'package:intl/intl.dart';
 
 import '../database.dart';
 
@@ -21,18 +23,19 @@ class DashboardPage extends StatefulWidget {
     return DashboardPageState();
   }
 }
-  // int caloriesConsumed = 0;
-  // int caloriesRemaining = 0;
+
 class DashboardPageState extends State<DashboardPage> {
   int calories;
   int caloriesRemaining = 0, caloriesConsumed = 0;
   Database db = new Database();
+  var today = new DateTime.now();
 
 @override
   void initState() {
    _setCalories();
     super.initState();
   }
+  
 
   _setCalories() async {
     int temp = await db.getCalories();
@@ -42,6 +45,17 @@ class DashboardPageState extends State<DashboardPage> {
     });
   }
 
+  _addDay() {
+    setState(() {
+      today = today.add(Duration(days: 1));
+    });
+  }
+
+  _removeDay() {
+    setState(() {
+      today = today.add(Duration(days: -1));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,14 +136,14 @@ class DashboardPageState extends State<DashboardPage> {
               children: <Widget>[
                 Expanded(
                     //minus button
-                  child: new OutlineButton(
+                    child: new OutlineButton(
                   shape: new CircleBorder(),
                   borderSide: BorderSide(color: Colors.grey, width: 2.0),
                   highlightedBorderColor: Colors.grey,
-                  child: Text("+",
+                  child: Text("-",
                       style: TextStyle(color: Colors.grey, fontSize: 20.0)),
                   onPressed: () {
-                    //TODO: change date
+                    _removeDay();
                   },
                 )),
                 Expanded(
@@ -140,11 +154,20 @@ class DashboardPageState extends State<DashboardPage> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100.0),
                         border: Border.all(color: Colors.grey, width: 2.0)),
-                    child: Text(
-                      "Date",
+                    child: FlatButton(
+                      onPressed: () {
+                        setState(() {
+                          today = DateTime.now();
+                        });
+                      },
+                      child:  Text(
+                      DateFormat.yMMMMd("en_US").format(today),
                       style: TextStyle(fontSize: 25.0, color: Colors.grey),
                       textAlign: TextAlign.center,
                     ),
+                    )
+                    
+                   
                   ),
                 ),
                 Expanded(
@@ -155,7 +178,9 @@ class DashboardPageState extends State<DashboardPage> {
                   highlightedBorderColor: Colors.grey,
                   child: Text("+",
                       style: TextStyle(color: Colors.grey, fontSize: 20.0)),
-                  onPressed: () {},
+                  onPressed: () {
+                    _addDay();
+                  },
                 ))
               ],
             ),
@@ -272,7 +297,8 @@ class DashboardPageState extends State<DashboardPage> {
           ],
         ),
       ),
-    ));
+      ),
+      );
   } //build
 
   _foodList(List food) {
