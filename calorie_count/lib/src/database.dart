@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
+
+import 'foodData.dart';
 //import 'package:firebase_storage/firebase_storage.dart';
 
 class Database {
@@ -42,7 +45,15 @@ class Database {
     return calories;
   }
 
-
-
+   Future<void> addFood(Food item, String mealtime) async {
+    String date = DateFormat.yMMMMd("en_US").format(DateTime.now());
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance.collection('foodDB').document(user.uid).collection(date).document(date).collection(mealtime).document(item.foodName).setData({
+      'foodName': item.foodName,
+      'calories': item.calories,
+      'servingSize': item.servingSize,
+      'servingUnit': item.unit
+    }, merge: true);
+  }
 
 }

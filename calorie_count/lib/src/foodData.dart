@@ -1,15 +1,16 @@
 //CHANGE 
 // https://codelabs.developers.google.com/codelabs/flutter-firebase/#8
 class Food {
-  String foodName;
-  int calories;
-  int servingSize;
+  String foodName, unit;
+  int calories, servingSize;
 
-  Food({this.foodName, this.calories, this.servingSize});
+  Food({this.foodName, this.calories, this.servingSize, this.unit});
 }
 
+class ListofFood {
+
 var breakfastData = <Food>[
-  Food(foodName: "Medium Banana", calories: 100, servingSize: 100),
+  Food(foodName: "Medium Banana", calories: 100, servingSize: 100, unit: "g"),
   Food(foodName: "Raspberry", calories: 80, servingSize: 50),
   Food(foodName: "Boiled Egg", calories: 100, servingSize: 140),
 ];
@@ -30,3 +31,5 @@ var snackData = <Food>[
   Food(foodName: "BBQ Chips", calories: 250, servingSize: 100),
   Food(foodName: "Almonds", calories: 80, servingSize: 50),
 ];
+
+}

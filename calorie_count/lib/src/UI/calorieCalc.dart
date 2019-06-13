@@ -136,7 +136,7 @@ class CalorieCalc extends StatelessWidget {
                   } else {
                     db.addData(ans, calories);
                   }
-                 Navigator.push(context, new MaterialPageRoute(builder: (context) => HomePage(camera: firstCamera, calories: calories)));
+                 Navigator.push(context, new MaterialPageRoute(builder: (context) => HomePage(camera: firstCamera)));
                 },
               ),
               decoration: BoxDecoration(

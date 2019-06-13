@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:calorie_count/src/UI/editQuesitonPage.dart';
 import 'package:calorie_count/src/UI/loginPage.dart';
+import 'package:calorie_count/src/UI/manualEntryPage.dart';
 import 'package:calorie_count/src/UI/rootPage.dart';
 import 'package:calorie_count/src/UI/settingPage.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        initialRoute: '/',
+        initialRoute: '/home',
         routes: <String, WidgetBuilder>{
           '/': (context) => RootPage(),
           '/login': (context) => LogInPage(),
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
           '/dashboard': (context) => DashboardPage(),
           '/setting': (context) => SettingPage(),
           '/edit': (context) => EditQuestionnaire(),
+          '/manual': (context) => ManualEntry(),
         },
         onUnknownRoute: (RouteSettings setting) {
           print("Unknown route");
@@ -45,11 +47,10 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatefulWidget {
   final CameraDescription camera;
-  final int calories;
 
   const HomePage({
     Key key,
-    @required this.camera, this.calories
+    @required this.camera
   }) : super(key: key);
 
   @override
@@ -66,7 +67,7 @@ class HomePageState extends State<HomePage> {
             body: PageView(
       children: <Widget>[
         CameraPage(camera: widget.camera),
-        DashboardPage(calories: widget.calories,),
+        DashboardPage(),
         ProgressPage(),
       ],
     )));

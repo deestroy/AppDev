@@ -264,7 +264,7 @@ class EditQuestionnaireState extends State<EditQuestionnaire> {
                             ),
                           ),
                           onFieldSubmitted: (String a) {
-                            submitted(a, ques, controllerName, formKey);
+                            submitted(a, ques, formKey);
                           }),
                     ],
                   ))),
@@ -274,7 +274,7 @@ class EditQuestionnaireState extends State<EditQuestionnaire> {
   } //inputQuestion
 
   //function that sets a varaible depending on what question was asked
-  submitted(String a, String q, TextEditingController controller,
+  submitted(String a, String q,
       GlobalKey<FormState> formKey) {
     final form = formKey.currentState;
     if (form.validate()) {

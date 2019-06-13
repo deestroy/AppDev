@@ -1,5 +1,6 @@
 import 'package:calorie_count/main.dart';
 import 'package:calorie_count/src/UI/calorieCalc.dart';
+import 'package:calorie_count/src/UI/manualEntryPage.dart';
 import 'package:calorie_count/src/UI/settingPage.dart';
 import 'package:calorie_count/src/foodData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,12 +12,6 @@ import 'package:intl/intl.dart';
 import '../database.dart';
 
 class DashboardPage extends StatefulWidget {
-  final int calories;
-
-  const DashboardPage({
-    Key key,
-    @required this.calories
-  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -26,17 +21,36 @@ class DashboardPage extends StatefulWidget {
 
 class DashboardPageState extends State<DashboardPage> {
   int calories;
+  int breakfastLength =0, lunchLength=0, dinnerLength=0, snackLength=0;
   int caloriesRemaining = 0, caloriesConsumed = 0;
   Database db = new Database();
   var today = new DateTime.now();
 
+  ListofFood lists = new ListofFood();
+
 @override
   void initState() {
    _setCalories();
+   _setLength();
     super.initState();
   }
-  
 
+  // sets the length of each list (for UI)
+  _setLength() async{
+    int tempBL = await getLength("Breakfast");
+    int tempLL = await getLength("Lunch");
+    int tempDL = await getLength("Dinner");
+    int tempSL = await getLength("Snack");
+
+    setState(() {
+      breakfastLength = tempBL;
+      lunchLength = tempLL;
+      dinnerLength = tempDL;
+      snackLength = tempSL;
+    });
+  }
+
+  //sets the number of calories
   _setCalories() async {
     int temp = await db.getCalories();
     setState(() {
@@ -55,6 +69,22 @@ class DashboardPageState extends State<DashboardPage> {
     setState(() {
       today = today.add(Duration(days: -1));
     });
+  }
+
+  getData(String mealtime) async {
+    String date = DateFormat.yMMMMd("en_US").format(DateTime.now());
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    QuerySnapshot querySnapshots = await Firestore.instance.collection('foodDB').document(user.uid).collection(date).document(date).collection(mealtime).getDocuments();
+    
+    return querySnapshots.documents;
+  }
+
+  getLength(String mealtime) async {
+    String date = DateFormat.yMMMMd("en_US").format(DateTime.now());
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    QuerySnapshot querySnapshots = await Firestore.instance.collection('foodDB').document(user.uid).collection(date).document(date).collection(mealtime).getDocuments();
+    
+    return querySnapshots.documents.length;
   }
 
   @override
@@ -237,12 +267,12 @@ class DashboardPageState extends State<DashboardPage> {
                     child: Padding(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
                         child: Container(
-                            height: 73.0 * breakfastData.length,
+                            height: 73.0 * breakfastLength,
                             padding: EdgeInsets.only(left: 8.0, right: 8.0),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15.0),
                                 border: Border.all(color: Colors.grey)),
-                            child: _foodList(breakfastData)))),
+                            child: _foodList(lists.breakfastData, "Breakfast")))),
               ],
             ),
             _header("Lunch", screenWidth),
@@ -253,12 +283,15 @@ class DashboardPageState extends State<DashboardPage> {
                     child: Padding(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
                         child: Container(
-                            height: 73.0 * lunchData.length,
+                            height: 73.0 * lunchLength,
                             padding: EdgeInsets.only(left: 8.0, right: 8.0),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15.0),
                                 border: Border.all(color: Colors.grey)),
-                            child: _foodList(lunchData)))),
+                            child: _foodList(lists.lunchData, "Lunch")
+                            )
+                            )
+                            ),
               ],
             ),
             _header("Dinner", screenWidth),
@@ -269,12 +302,12 @@ class DashboardPageState extends State<DashboardPage> {
                     child: Padding(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
                         child: Container(
-                            height: 73.0 * dinnerData.length,
+                            height: 73.0 * dinnerLength,
                             padding: EdgeInsets.only(left: 8.0, right: 8.0),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15.0),
                                 border: Border.all(color: Colors.grey)),
-                            child: _foodList(dinnerData)))),
+                            child: _foodList(lists.dinnerData, "Dinner")))),
               ],
             ),
             _header("Snack", screenWidth),
@@ -285,12 +318,12 @@ class DashboardPageState extends State<DashboardPage> {
                     child: Padding(
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
                         child: Container(
-                            height: 73.0 * snackData.length,
+                            height: 73.0 * snackLength,
                             padding: EdgeInsets.only(left: 8.0, right: 8.0),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15.0),
                                 border: Border.all(color: Colors.grey)),
-                            child: _foodList(snackData))))
+                            child: _foodList(lists.snackData, "Snack"))))
               ],
             ),
             Padding(padding: EdgeInsets.only(top: 8.0))
@@ -301,26 +334,31 @@ class DashboardPageState extends State<DashboardPage> {
       );
   } //build
 
-  _foodList(List food) {
-    return ListView.builder(
-      padding: EdgeInsets.all(0.0),
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: food.length,
-      itemBuilder: (context, i) => Column(
+
+  _foodList(List food, String mealtime) {
+    return FutureBuilder(
+      future: getData(mealtime),
+      builder: (context, snapshot) {
+      if (!snapshot.hasData) return ListTile();
+      return ListView.builder(
+        padding: EdgeInsets.all(0.0),
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: snapshot.data.length,
+        itemBuilder: (_, index) => Column(
             children: <Widget>[
               ListTile(
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(food[i].foodName.toString(),
+                    Text(snapshot.data[index].data['foodName'],
                         style: TextStyle(fontSize: 14.0, color: Colors.grey)),
-                    Text(food[i].calories.toString(),
+                    Text(snapshot.data[index].data['calories'].toString(),
                         style: TextStyle(fontSize: 12.0, color: Colors.grey)),
                   ],
                 ),
                 subtitle: Container(
                   // padding: EdgeInsets.only(top: 5.0),
-                  child: Text(food[i].servingSize.toString(),
+                  child: Text(snapshot.data[index].data['servingSize'].toString() + " " + snapshot.data[index].data['servingUnit'],
                       style: TextStyle(fontSize: 10.0)),
                 ),
               ),
@@ -329,8 +367,46 @@ class DashboardPageState extends State<DashboardPage> {
               ),
             ],
           ),
+
+      );
+       
+      }
     );
+    
+
+
   }
+
+  // _foodList(List food) {
+  //   return ListView.builder(
+  //     padding: EdgeInsets.all(0.0),
+  //     physics: NeverScrollableScrollPhysics(),
+  //     itemCount: food.length,
+  //     itemBuilder: (context, i) => Column(
+  //           children: <Widget>[
+  //             ListTile(
+  //               title: Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                 children: <Widget>[
+  //                   Text(food[i].foodName.toString(),
+  //                       style: TextStyle(fontSize: 14.0, color: Colors.grey)),
+  //                   Text(food[i].calories.toString(),
+  //                       style: TextStyle(fontSize: 12.0, color: Colors.grey)),
+  //                 ],
+  //               ),
+  //               subtitle: Container(
+  //                 // padding: EdgeInsets.only(top: 5.0),
+  //                 child: Text(food[i].servingSize.toString() + " " + food[i].unit.toString(),
+  //                     style: TextStyle(fontSize: 10.0)),
+  //               ),
+  //             ),
+  //             Divider(
+  //               height: 0.0, //no padding
+  //             ),
+  //           ],
+  //         ),
+  //   );
+  // }
 
   //returns a Widget that displays title of meal and a plus button to add more meals
   _header(String mealTime, double screenWidth) {
@@ -364,7 +440,17 @@ class DashboardPageState extends State<DashboardPage> {
                   "+",
                   style: TextStyle(color: Colors.black),
                 ),
-                onPressed: () => {},
+                onPressed: () {
+                  if (mealTime == "Breakfast") {
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => new ManualEntry(mealTime: "Breakfast")));
+                  } else if (mealTime == "Lunch") {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => new ManualEntry(mealTime: "Lunch")));
+                  } else if (mealTime == "Dinner") {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => new ManualEntry(mealTime: "Dinner")));
+                  } else {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => new ManualEntry(mealTime: "Snack")));
+                  }
+                },
               ),
             ),
           ],
