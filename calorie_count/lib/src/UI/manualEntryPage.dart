@@ -27,43 +27,16 @@ class ManualEntryState extends State<ManualEntry> {
   var _formKey = GlobalKey<FormState>();
   var _formKey2 = GlobalKey<FormState>();
   var _formKey3 = GlobalKey<FormState>();
-  String foodName, portionUnit;
-  int portionSize, calories;
-  var units = ["g", "cups"];
-  String mealTime;
-  List<Food> foodList;
-  ListofFood lists = new ListofFood();
-  
+  String foodName, portionUnit, mealTime;
+  int portionSize, calories, caloriesConsumed = 0;
+  var units = ["g", "cups", 'mL'];
   Database _db = new Database();
 
   @override
   void initState() {
-    mealTime = widget.mealTime;
-    _setList(mealTime);
-    print("$mealTime");
-    print("$foodList");
+    mealTime = widget.mealTime; //mealTime passed through
+    //_setList(mealTime);
     super.initState();
-  }
-
-  _setList(String mealtime) {
-    if (mealtime == "Breakfast") {
-      setState(() {
-        foodList = lists.breakfastData;
-      });
-    } else if (mealtime == "Lunch") {
-      setState(() {
-        foodList = lists.lunchData;
-      });
-    } else if (mealtime == "Dinner") {
-      setState(() {
-        foodList = lists.dinnerData;
-      });
-    } else if (mealtime == "Snack") {
-      setState(() {
-        foodList = lists.snackData;
-      });
-    }
-    return foodList;
   }
 
   @override
@@ -108,13 +81,14 @@ class ManualEntryState extends State<ManualEntry> {
               child: Text("Save",
                   style: TextStyle(fontSize: 16.0, color: Colors.white)),
               onPressed: () {
-                if ((foodName != null) && (portionUnit != null) && (portionSize != null) && (calories != null)) {
-                  print("pressed");
+                if ((foodName != null) && (portionUnit != null) && (portionSize != null) && (calories != null)) { 
                   Food newItem = Food(calories: calories, foodName: foodName, servingSize: portionSize, unit: portionUnit);
-                  foodList.add(newItem);
                   _db.addFood(newItem, mealTime);
-                  print("$foodList");
-                  Navigator.pop(context);
+                   Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                new HomePage(camera: cameras.first,)));
                 }
               },
             ),

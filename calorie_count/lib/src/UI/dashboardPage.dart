@@ -1,5 +1,4 @@
 import 'package:calorie_count/main.dart';
-import 'package:calorie_count/src/UI/calorieCalc.dart';
 import 'package:calorie_count/src/UI/manualEntryPage.dart';
 import 'package:calorie_count/src/UI/settingPage.dart';
 import 'package:calorie_count/src/foodData.dart';
@@ -12,7 +11,6 @@ import 'package:intl/intl.dart';
 import '../database.dart';
 
 class DashboardPage extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() {
     return DashboardPageState();
@@ -21,22 +19,22 @@ class DashboardPage extends StatefulWidget {
 
 class DashboardPageState extends State<DashboardPage> {
   int calories;
-  int breakfastLength =0, lunchLength=0, dinnerLength=0, snackLength=0;
+  int breakfastLength = 0, lunchLength = 0, dinnerLength = 0, snackLength = 0;
   int caloriesRemaining = 0, caloriesConsumed = 0;
   Database db = new Database();
   var today = new DateTime.now();
 
-  ListofFood lists = new ListofFood();
-
-@override
+  @override
   void initState() {
-   _setCalories();
-   _setLength();
+    _setCalories();
+    _setLength();
+    print(DateFormat.yMMMMd("en_US").format(today));
+    db.getCaloriesConsumed(DateFormat.yMMMMd("en_US").format(today));
     super.initState();
   }
 
   // sets the length of each list (for UI)
-  _setLength() async{
+  _setLength() async {
     int tempBL = await getLength("Breakfast");
     int tempLL = await getLength("Lunch");
     int tempDL = await getLength("Dinner");
@@ -54,7 +52,6 @@ class DashboardPageState extends State<DashboardPage> {
   _setCalories() async {
     int temp = await db.getCalories();
     setState(() {
-      print("$temp");
       calories = temp;
     });
   }
@@ -74,16 +71,28 @@ class DashboardPageState extends State<DashboardPage> {
   getData(String mealtime) async {
     String date = DateFormat.yMMMMd("en_US").format(today);
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    QuerySnapshot querySnapshots = await Firestore.instance.collection('foodDB').document(user.uid).collection(date).document(date).collection(mealtime).getDocuments();
-    
+    QuerySnapshot querySnapshots = await Firestore.instance
+        .collection('foodDB')
+        .document(user.uid)
+        .collection(date)
+        .document(date)
+        .collection(mealtime)
+        .getDocuments();
+
     return querySnapshots.documents;
   }
 
   getLength(String mealtime) async {
     String date = DateFormat.yMMMMd("en_US").format(today);
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    QuerySnapshot querySnapshots = await Firestore.instance.collection('foodDB').document(user.uid).collection(date).document(date).collection(mealtime).getDocuments();
-    
+    QuerySnapshot querySnapshots = await Firestore.instance
+        .collection('foodDB')
+        .document(user.uid)
+        .collection(date)
+        .document(date)
+        .collection(mealtime)
+        .getDocuments();
+
     return querySnapshots.documents.length;
   }
 
@@ -94,250 +103,265 @@ class DashboardPageState extends State<DashboardPage> {
 
     return Scaffold(
       body: Container(
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Row(
-              //first row with title and settings button
-              children: <Widget>[
-                Padding(padding: EdgeInsets.only(bottom: 70.0)),
-                Stack(
-                  children: <Widget>[
-                    Center(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                        width: screenWidth,
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Row(
+                //first row with title and settings button
+                children: <Widget>[
+                  Padding(padding: EdgeInsets.only(bottom: 70.0)),
+                  Stack(
+                    children: <Widget>[
+                      Center(
+                        child: Container(
+                          padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                          width: screenWidth,
+                          child: Text(
+                            "Food Log",
+                            style: TextStyle(fontSize: 24.0),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      FutureBuilder(
+                          future: FirebaseAuth.instance.currentUser(),
+                          builder:
+                              (context, AsyncSnapshot<FirebaseUser> snapshot) {
+                            if (snapshot.hasData) {
+                              return Positioned(
+                                //Settings button
+                                right: -7.0,
+                                top: 3.0,
+                                bottom: 3.0,
+                                child: new OutlineButton(
+                                  child: Container(
+                                    width: 40.0,
+                                    height: 40.0,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: NetworkImage(
+                                            snapshot.data.photoUrl),
+                                      ),
+                                    ),
+                                  ),
+                                  shape: new CircleBorder(),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 2.0),
+                                  highlightedBorderColor: Colors.grey,
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                SettingPage()));
+                                  },
+                                ),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          }),
+                    ],
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 6.0),
+              ),
+              Row(
+                //SECOND ROW TO CHANGE DATE
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                      //minus button
+                      child: new OutlineButton(
+                    shape: new CircleBorder(),
+                    borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                    highlightedBorderColor: Colors.grey,
+                    child: Text("-",
+                        style: TextStyle(color: Colors.grey, fontSize: 20.0)),
+                    onPressed: () {
+                      _removeDay();
+                      _setLength();
+                    },
+                  )),
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      height: 40.0,
+                      //Date display
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100.0),
+                          border: Border.all(color: Colors.grey, width: 2.0)),
+                      child: FlatButton(
+                        onPressed: () {
+                          setState(() {
+                            today = DateTime.now();
+                          });
+                        },
                         child: Text(
-                          "Food Log",
-                          style: TextStyle(fontSize: 24.0),
+                          DateFormat.yMMMMd("en_US").format(today),
+                          style: TextStyle(fontSize: 25.0, color: Colors.grey),
                           textAlign: TextAlign.center,
                         ),
                       ),
                     ),
-                    FutureBuilder(
-                        future: FirebaseAuth.instance.currentUser(),
-                        builder:
-                            (context, AsyncSnapshot<FirebaseUser> snapshot) {
-                          if (snapshot.hasData) {
-                            return Positioned(
-                              //Settings button
-                              right: -7.0,
-                              top: 3.0,
-                              bottom: 3.0,
-                              child: new OutlineButton(
-                                child: Container(
-                                  width: 40.0,
-                                  height: 40.0,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image:
-                                          NetworkImage(snapshot.data.photoUrl),
-                                    ),
-                                  ),
-                                ),
-                                shape: new CircleBorder(),
-                                borderSide:
-                                    BorderSide(color: Colors.black, width: 2.0),
-                                highlightedBorderColor: Colors.grey,
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) => SettingPage()));
-                                },
-                              ),
-                            );
-                          } else {
-                            return Container();
-                          }
-                        }),
-                  ],
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 6.0),
-            ),
-            Row(
-              //SECOND ROW TO CHANGE DATE
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                    //minus button
-                    child: new OutlineButton(
-                  shape: new CircleBorder(),
-                  borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                  highlightedBorderColor: Colors.grey,
-                  child: Text("-",
-                      style: TextStyle(color: Colors.grey, fontSize: 20.0)),
-                  onPressed: () {
-                    _removeDay();
-                    _setLength();
-                  },
-                )),
-                Expanded(
-                  flex: 3,
-                  child: Container(
-                    height: 40.0,
-                    //Date display
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100.0),
-                        border: Border.all(color: Colors.grey, width: 2.0)),
-                    child: FlatButton(
-                      onPressed: () {
-                        setState(() {
-                          today = DateTime.now();
-                          _setLength();
-                        });
-                      },
-                      child:  Text(
-                      DateFormat.yMMMMd("en_US").format(today),
-                      style: TextStyle(fontSize: 25.0, color: Colors.grey),
+                  ),
+                  Expanded(
+                      //plus button
+                      child: new OutlineButton(
+                    shape: new CircleBorder(),
+                    borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                    highlightedBorderColor: Colors.grey,
+                    child: Text("+",
+                        style: TextStyle(color: Colors.grey, fontSize: 20.0)),
+                    onPressed: () {
+                      _addDay();
+                      _setLength();
+                    },
+                  ))
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 8.0),
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      "Calorie Goal\t$calories",
+                      style: TextStyle(fontSize: 14.0),
                       textAlign: TextAlign.center,
                     ),
-                    )
-                    
-                   
                   ),
-                ),
-                Expanded(
-                    //plus button
-                    child: new OutlineButton(
-                  shape: new CircleBorder(),
-                  borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                  highlightedBorderColor: Colors.grey,
-                  child: Text("+",
-                      style: TextStyle(color: Colors.grey, fontSize: 20.0)),
-                  onPressed: () {
-                    _addDay();
-                    _setLength();
-                  },
-                ))
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 3,
-                  child: Text(
-                    "Calorie Goal\t$calories",
-                    style: TextStyle(fontSize: 14.0),
-                    textAlign: TextAlign.center,
+                  Expanded(
+                    child: Text(
+                      "-",
+                      style: TextStyle(fontSize: 14.0),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Text(
-                    "-",
-                    style: TextStyle(fontSize: 14.0),
-                    textAlign: TextAlign.center,
+                  Expanded(
+                    flex: 3,
+                    child: FutureBuilder(
+                      future: db.getCaloriesConsumed(DateFormat.yMMMMd("en_US").format(today)),
+                      builder: (context, snapshot) {
+                        caloriesConsumed = snapshot.data;
+                        if (snapshot != null) {
+                          return Text(
+                            "Calories Consumed\t${snapshot.data}",
+                            style: TextStyle(fontSize: 14.0),
+                            textAlign: TextAlign.center,
+                          );
+                        } else {
+                          return Text("Calories Consumed");
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Text(
-                    "Calories Consumed\t$caloriesConsumed",
-                    style: TextStyle(fontSize: 14.0),
-                    textAlign: TextAlign.center,
+                  Expanded(
+                    child: Text(
+                      "=",
+                      style: TextStyle(fontSize: 14.0),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Text(
-                    "=",
-                    style: TextStyle(fontSize: 14.0),
-                    textAlign: TextAlign.center,
+                  Expanded(
+                    flex: 3,
+                    child: FutureBuilder(
+                      future: db.getCaloriesConsumed(DateFormat.yMMMMd("en_US").format(today)),
+                      builder: (context, snapshot) {
+                        caloriesConsumed = snapshot.data;
+                        if (snapshot != null && calories != null) {
+                          return Text(
+                            "Calories Remaining\t${calories - snapshot.data}",
+                            style: TextStyle(fontSize: 14.0),
+                            textAlign: TextAlign.center,
+                          );
+                        } else {
+                          return Text("Calories Remaining");
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Text(
-                    "Calories Remaining\t$caloriesRemaining",
-                    style: TextStyle(fontSize: 14.0),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 12.0)),
-            _header("Breakfast", screenWidth),
-            Row(
-              children: <Widget>[
-                Expanded(
-                    child: Padding(
-                        padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                        child: Container(
-                            height: 73.0 * breakfastLength,
-                            padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.0),
-                                border: Border.all(color: Colors.grey)),
-                            child: _foodList(lists.breakfastData, "Breakfast")))),
-              ],
-            ),
-            _header("Lunch", screenWidth),
-            Row(
-              //diplays food eaten during lunch
-              children: <Widget>[
-                Expanded(
-                    child: Padding(
-                        padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                        child: Container(
-                            height: 73.0 * lunchLength,
-                            padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.0),
-                                border: Border.all(color: Colors.grey)),
-                            child: _foodList(lists.lunchData, "Lunch")
-                            )
-                            )
-                            ),
-              ],
-            ),
-            _header("Dinner", screenWidth),
-            Row(
-              //diplays food eaten
-              children: <Widget>[
-                Expanded(
-                    child: Padding(
-                        padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                        child: Container(
-                            height: 73.0 * dinnerLength,
-                            padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.0),
-                                border: Border.all(color: Colors.grey)),
-                            child: _foodList(lists.dinnerData, "Dinner")))),
-              ],
-            ),
-            _header("Snack", screenWidth),
-            Row(
-              //diplays food eaten as snacks
-              children: <Widget>[
-                Expanded(
-                    child: Padding(
-                        padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                        child: Container(
-                            height: 73.0 * snackLength,
-                            padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.0),
-                                border: Border.all(color: Colors.grey)),
-                            child: _foodList(lists.snackData, "Snack"))))
-              ],
-            ),
-            Padding(padding: EdgeInsets.only(top: 8.0))
-          ],
+                ],
+              ),
+              Padding(padding: EdgeInsets.only(bottom: 12.0)),
+              _header("Breakfast", screenWidth),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                      child: Padding(
+                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                          child: Container(
+                              height: 73.0 * breakfastLength,
+                              padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  border: Border.all(color: Colors.grey)),
+                              child: _foodList("Breakfast")))),
+                ],
+              ),
+              _header("Lunch", screenWidth),
+              Row(
+                //diplays food eaten during lunch
+                children: <Widget>[
+                  Expanded(
+                      child: Padding(
+                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                          child: Container(
+                              height: 73.0 * lunchLength,
+                              padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  border: Border.all(color: Colors.grey)),
+                              child: _foodList("Lunch")))),
+                ],
+              ),
+              _header("Dinner", screenWidth),
+              Row(
+                //diplays food eaten
+                children: <Widget>[
+                  Expanded(
+                      child: Padding(
+                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                          child: Container(
+                              height: 73.0 * dinnerLength,
+                              padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  border: Border.all(color: Colors.grey)),
+                              child: _foodList("Dinner")))),
+                ],
+              ),
+              _header("Snack", screenWidth),
+              Row(
+                //diplays food eaten as snacks
+                children: <Widget>[
+                  Expanded(
+                      child: Padding(
+                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                          child: Container(
+                              height: 73.0 * snackLength,
+                              padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  border: Border.all(color: Colors.grey)),
+                              child: _foodList("Snack"))))
+                ],
+              ),
+              Padding(padding: EdgeInsets.only(top: 8.0))
+            ],
+          ),
         ),
       ),
-      ),
-      );
+    );
   } //build
 
-  _foodList(List food, String mealtime) {
+  _foodList(String mealtime) {
     return FutureBuilder(
       future: getData(mealtime),
       builder: (context, snapshot) {
@@ -363,6 +387,30 @@ class DashboardPageState extends State<DashboardPage> {
                   child: Text(snapshot.data[index].data['servingSize'].toString() + " " + snapshot.data[index].data['servingUnit'],
                       style: TextStyle(fontSize: 10.0)),
                 ),
+              onLongPress: () {
+                showModalBottomSheet<void>(context: context,
+                 builder: (BuildContext context) {
+                return Container(
+                    child: new Wrap(
+                    children: <Widget>[
+                        new ListTile(
+                        leading: new Icon(Icons.delete),
+                        title: new Text('Delete'),
+                        onTap: () {
+                          setState(() {
+                            db.removeFood(snapshot.data[index].data['foodName'], mealtime, (snapshot.data[index].data['calories'])*-1, DateFormat.yMMMMd("en_US").format(today));
+                            _setLength();
+                          });
+                        }
+                                         
+                        )
+                        
+                    ]
+                    )
+                );
+            });
+              } ,
+              
               ),
               Divider(
                 height: 0.0, //no padding
@@ -374,9 +422,6 @@ class DashboardPageState extends State<DashboardPage> {
        
       }
     );
-    
-
-
   }
 
   //returns a Widget that displays title of meal and a plus button to add more meals
@@ -413,13 +458,29 @@ class DashboardPageState extends State<DashboardPage> {
                 ),
                 onPressed: () {
                   if (mealTime == "Breakfast") {
-                     Navigator.push(context, MaterialPageRoute(builder: (context) => new ManualEntry(mealTime: "Breakfast")));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                new ManualEntry(mealTime: "Breakfast")));
                   } else if (mealTime == "Lunch") {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => new ManualEntry(mealTime: "Lunch")));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                new ManualEntry(mealTime: "Lunch")));
                   } else if (mealTime == "Dinner") {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => new ManualEntry(mealTime: "Dinner")));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                new ManualEntry(mealTime: "Dinner")));
                   } else {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => new ManualEntry(mealTime: "Snack")));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                new ManualEntry(mealTime: "Snack")));
                   }
                 },
               ),
@@ -428,4 +489,3 @@ class DashboardPageState extends State<DashboardPage> {
         ));
   }
 } //Dashboard page
-

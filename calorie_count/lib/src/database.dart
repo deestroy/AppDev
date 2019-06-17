@@ -37,14 +37,15 @@ class Database {
     });
   }
 
+  //gets the user's calorie goal
    getCalories() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     DocumentSnapshot snapshot = await Firestore.instance.collection('questionnaire').document(user.uid).get();
     int calories = snapshot['calories'];
-    print("$calories");
     return calories;
   }
-
+  
+  //adds food user ate to the database
    Future<void> addFood(Food item, String mealtime) async {
     String date = DateFormat.yMMMMd("en_US").format(DateTime.now());
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
@@ -54,6 +55,43 @@ class Database {
       'servingSize': item.servingSize,
       'servingUnit': item.unit
     }, merge: true);
+    setCaloriesConsumed(item.calories, date);
+  }
+
+  //delete food user ate to the database
+   Future<void> removeFood(String itemName, String mealtime, int calories, String date) async {
+    String date = DateFormat.yMMMMd("en_US").format(DateTime.now());
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance.collection('foodDB').document(user.uid).collection(date).document(date).collection(mealtime).document(itemName).delete();
+    setCaloriesConsumed(calories, date);
+  }
+
+  //sets the number of caloies consumed by the user that day
+  setCaloriesConsumed(int cal, String date) async {
+    int caloriesConsumed;
+    int previousCal = await getCaloriesConsumed(date);
+    if (previousCal != null) {
+      caloriesConsumed = previousCal + cal;
+    } else {
+      caloriesConsumed = cal;
+    }
+    
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance.collection('caloriesConsumed').document(user.uid).collection(date).document('caloriesConsumed').setData({
+      'calories': caloriesConsumed,
+    }, merge: true);
+  }
+
+  //return user's number of calories consumed for that day
+  getCaloriesConsumed(String date) async{
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    DocumentSnapshot snapshot = await Firestore.instance.collection('caloriesConsumed').document(user.uid).collection(date).document('caloriesConsumed').get();
+    if (snapshot.data != null) {
+      int calsConsumed = snapshot['calories'];
+      return calsConsumed;
+    } else {
+      return 0;
+    }
   }
 
 }

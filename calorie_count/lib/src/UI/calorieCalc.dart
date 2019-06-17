@@ -270,5 +270,4 @@ class QuestionAnswers {
   getLoseGainString() {
     return loseGainString;
   }
-
 } //QuestionAnswers
