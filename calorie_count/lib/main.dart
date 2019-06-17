@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        initialRoute: '/home',
+        initialRoute: '/',
         routes: <String, WidgetBuilder>{
           '/': (context) => RootPage(),
           '/login': (context) => LogInPage(),
@@ -78,3 +78,11 @@ class AppColours {
   final offBlack = const Color(0xFF4C4B4B);
   final coral = const Color(0xFFEA7773);
 }
+
+class Food {
+  String foodName, unit;
+  int calories, servingSize;
+
+  Food({this.foodName, this.calories, this.servingSize, this.unit});
+}
+

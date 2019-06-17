@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../foodData.dart';
 
 class ManualEntry extends StatefulWidget {
   final String mealTime;

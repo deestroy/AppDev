@@ -55,7 +55,6 @@ class AuthService {
     });
   
     updateUserData(user);
-    print(user.displayName + " signed in");
 
     loading.add(false);
     return user;

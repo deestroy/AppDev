@@ -1,7 +1,6 @@
 import 'package:calorie_count/main.dart';
 import 'package:calorie_count/src/UI/manualEntryPage.dart';
 import 'package:calorie_count/src/UI/settingPage.dart';
-import 'package:calorie_count/src/foodData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

@@ -47,10 +47,8 @@ class RootPageState extends State<RootPage> {
                   future: _checkQuestionnaireComplete(),
                   builder: (context, AsyncSnapshot<DocumentSnapshot> document) {
                     if (document.hasData) {
-                   //   print("Q Document found"); 
                       return HomePage(camera: firstCamera);
                     } else {
-                   //   print("No document found");
                       return QuestionPage();
                     }
                   },
