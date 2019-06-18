@@ -145,7 +145,8 @@ class QuestionPageState extends State<QuestionPage> {
             Expanded(
                 child: Center(
                     child: FlutterLogo(
-              size: 150.0,
+                      colors: Colors.pink,
+              size: 200.0,
             ))),
             Padding(padding: EdgeInsets.only(bottom: 100.0)),
             Text(

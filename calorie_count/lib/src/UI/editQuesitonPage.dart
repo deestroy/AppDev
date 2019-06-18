@@ -57,13 +57,13 @@ class EditQuestionnaireState extends State<EditQuestionnaire> {
 
   List<GenderQ> genderQuestion = [GenderQ("M", "Male"), GenderQ("F", "Female")];
 
-  @override
-  void dispose() {
-    _ageController.dispose();
-    _heightController.dispose();
-    _weightController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _ageController.dispose();
+  //   _heightController.dispose();
+  //   _weightController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -157,10 +157,15 @@ class EditQuestionnaireState extends State<EditQuestionnaire> {
         children: <Widget>[
           Align(
             alignment: Alignment.topLeft,
-            child: BackButton(
-              color: c.offBlack,
-            ),
-          ),
+            child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                ),
+                tooltip: "Go back",
+                onPressed: () {
+                  Navigator.pop(context);
+                })),
           Expanded(
               child: Center(
                   child: FlutterLogo(

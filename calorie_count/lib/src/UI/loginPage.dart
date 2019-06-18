@@ -7,7 +7,6 @@ class LogInPage extends StatelessWidget {
   //creates a Page containing the app name and sign in button
   var randomNum = Random().nextInt(4);
 
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -15,15 +14,23 @@ class LogInPage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("images/pic$randomNum.JPG"),
+                image: AssetImage("images/pic3.JPG"),
                 fit: BoxFit.cover)),
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            colouredText(),
+            //colouredText(),
+            Text(
+              'CALORIE COUNT',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 40.0),
+              textAlign: TextAlign.center,
+            ),
             Padding(
-              padding: EdgeInsets.all(120.0),
+              padding: EdgeInsets.all(140.0),
             ),
             Container(
               margin: EdgeInsets.all(32.0),
@@ -38,28 +45,26 @@ class LogInPage extends StatelessWidget {
         ),
       ),
     );
-    
   }
    Widget colouredText () {
    if (randomNum == 0) {
      return Text(
-              'CALORIE COUNTER',
+              'CALORIE COUNT',
               style: TextStyle(
                   color: AppColours().offBlack,
                   fontWeight: FontWeight.bold,
-                  fontSize: 30.0),
+                  fontSize: 40.0),
               textAlign: TextAlign.center,
             );
    } else {
      return Text(
-              'CALORIE COUNTER',
+              'CALORIE COUNT',
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 30.0),
+                  fontSize: 40.0),
               textAlign: TextAlign.center,
             );
-
    }
  }
 }

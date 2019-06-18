@@ -68,7 +68,7 @@ class HomePageState extends State<HomePage> {
       children: <Widget>[
         CameraPage(camera: widget.camera),
         DashboardPage(),
-        ProgressPage(),
+      //  ProgressPage(),
       ],
     )));
   }

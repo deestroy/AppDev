@@ -43,8 +43,7 @@ class Database {
   }
   
   //adds food user ate to the database
-   Future<void> addFood(Food item, String mealtime) async {
-    String date = DateFormat.yMMMMd("en_US").format(DateTime.now());
+   Future<void> addFood(Food item, String mealtime, String date) async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     Firestore.instance.collection('foodDB').document(user.uid).collection(date).document(date).collection(mealtime).document(item.foodName).setData({
       'foodName': item.foodName,
@@ -90,5 +89,4 @@ class Database {
       return 0;
     }
   }
-
 }

@@ -3,14 +3,15 @@ import 'package:calorie_count/src/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 
 class ManualEntry extends StatefulWidget {
-  final String mealTime;
+  final String mealTime, today;
 
   const ManualEntry({
     Key key,
-    @required this.mealTime
+    @required this.mealTime, this.today
   }) : super(key: key);
 
   @override
@@ -26,15 +27,15 @@ class ManualEntryState extends State<ManualEntry> {
   var _formKey = GlobalKey<FormState>();
   var _formKey2 = GlobalKey<FormState>();
   var _formKey3 = GlobalKey<FormState>();
-  String foodName, portionUnit, mealTime;
+  String foodName, portionUnit, mealTime, today;
   int portionSize, calories, caloriesConsumed = 0;
   var units = ["g", "cups", 'mL'];
   Database _db = new Database();
 
   @override
   void initState() {
+    today = widget.today;
     mealTime = widget.mealTime; //mealTime passed through
-    //_setList(mealTime);
     super.initState();
   }
 
@@ -82,7 +83,7 @@ class ManualEntryState extends State<ManualEntry> {
               onPressed: () {
                 if ((foodName != null) && (portionUnit != null) && (portionSize != null) && (calories != null)) { 
                   Food newItem = Food(calories: calories, foodName: foodName, servingSize: portionSize, unit: portionUnit);
-                  _db.addFood(newItem, mealTime);
+                  _db.addFood(newItem, mealTime, today);
                    Navigator.push(
                         context,
                         MaterialPageRoute(

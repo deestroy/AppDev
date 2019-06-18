@@ -18,15 +18,17 @@ class SettingPage extends StatelessWidget {
               return Column(
                 children: <Widget>[
                   //back button
-                  Padding(
-                    padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
-                    child: Align(
+                  Align(
                       alignment: Alignment.topLeft,
-                      child: BackButton(
-                        color: AppColours().offBlack,
-                      ),
-                    ),
-                  ),
+                      child: IconButton(
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: Colors.black,
+                          ),
+                          tooltip: "Go back",
+                          onPressed: () {
+                            Navigator.pop(context);
+                          })),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -66,9 +68,9 @@ class SettingPage extends StatelessWidget {
                     child: FlatButton(
                       onPressed: () {
                         Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) => EditQuestionnaire()));
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => EditQuestionnaire()));
                       },
                       child: Text("Edit Goals",
                           style: TextStyle(

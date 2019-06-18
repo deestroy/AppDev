@@ -27,7 +27,6 @@ class DashboardPageState extends State<DashboardPage> {
   void initState() {
     _setCalories();
     _setLength();
-    print(DateFormat.yMMMMd("en_US").format(today));
     db.getCaloriesConsumed(DateFormat.yMMMMd("en_US").format(today));
     super.initState();
   }
@@ -461,25 +460,25 @@ class DashboardPageState extends State<DashboardPage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                new ManualEntry(mealTime: "Breakfast")));
+                                new ManualEntry(mealTime: "Breakfast", today: DateFormat.yMMMMd("en_US").format(today))));
                   } else if (mealTime == "Lunch") {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                new ManualEntry(mealTime: "Lunch")));
+                                new ManualEntry(mealTime: "Lunch", today: DateFormat.yMMMMd("en_US").format(today))));
                   } else if (mealTime == "Dinner") {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                new ManualEntry(mealTime: "Dinner")));
+                                new ManualEntry(mealTime: "Dinner", today: DateFormat.yMMMMd("en_US").format(today))));
                   } else {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                new ManualEntry(mealTime: "Snack")));
+                                new ManualEntry(mealTime: "Snack", today: DateFormat.yMMMMd("en_US").format(today))));
                   }
                 },
               ),
